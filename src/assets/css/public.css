@@ -1,0 +1,410 @@
+/*分页*/
+
+.page {
+    text-align: right;
+    padding: 10px;
+}
+
+i{
+    font-style: normal;
+}
+
+.clearfix:after{
+    display: block;
+    clear: both;
+    content: "";
+    visibility: hidden;
+    height: 0;
+}
+.clearfix{
+    zoom:1;
+}
+
+/* common text-align */
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align-last: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* common float */
+.fl{
+    float: left;
+}
+
+.fr{
+    float: right;
+}
+
+
+/* common padding */
+
+.p0 {
+    padding: 0;
+}
+
+.pt0 {
+    padding-top: 0;
+}
+
+.pb0 {
+    padding-bottom: 0;
+}
+
+.pl0 {
+    padding-left: 0;
+}
+
+.pr0 {
+    padding-right: 0;
+}
+
+.pt5 {
+    padding-top: 5px;
+}
+
+.pb5 {
+    padding-bottom: 5px;
+}
+
+.pl5 {
+    padding-left: 5px;
+}
+
+.pr5 {
+    padding-right: 5px;
+}
+
+.pt10 {
+    padding-top: 10px;
+}
+
+.pb10 {
+    padding-bottom: 10px;
+}
+
+.pl10 {
+    padding-left: 10px;
+}
+
+.pr10 {
+    padding-right: 10px;
+}
+
+.pt15 {
+    padding-top: 15px;
+}
+
+.pb15 {
+    padding-bottom: 15px;
+}
+
+.pl15 {
+    padding-left: 15px;
+}
+
+.pr15 {
+    padding-right: 15px;
+}
+
+.pt20 {
+    padding-top: 20px;
+}
+
+.pb20 {
+    padding-bottom: 20px;
+}
+
+.pl20 {
+    padding-left: 20px;
+}
+
+.pr20 {
+    padding-right: 20px;
+}
+
+
+/* common margin */
+
+.m0 {
+    margin: 0;
+}
+
+.mt0 {
+    margin-top: 0;
+}
+
+.mb0 {
+    margin-bottom: 0;
+}
+
+.ml0 {
+    margin-left: 0;
+}
+
+.mr0 {
+    margin-right: 0;
+}
+
+.mt5 {
+    margin-top: 5px;
+}
+
+.mb5 {
+    margin-bottom: 5px;
+}
+
+.ml5 {
+    margin-left: 5px;
+}
+
+.mr5 {
+    margin-right: 5px;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.ml10 {
+    margin-left: 10px;
+}
+
+.mr10 {
+    margin-right: 10px;
+}
+
+.mt15 {
+    margin-top: 15px;
+}
+
+.mb15 {
+    margin-bottom: 15px;
+}
+
+.ml15 {
+    margin-left: 15px;
+}
+
+.mr15 {
+    margin-right: 15px;
+}
+
+.mt20 {
+    margin-top: 20px;
+}
+
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.ml20 {
+    margin-left: 20px;
+}
+
+.mr20 {
+    margin-right: 20px;
+}
+
+.mt30 {
+    margin-top: 30px;
+}
+
+.mb30 {
+    margin-bottom: 30px;
+}
+
+.ml30 {
+    margin-left: 30px;
+}
+
+.mr30 {
+    margin-right: 30px;
+}
+
+
+/*清除浮动*/
+
+.clear-fix {
+    zoom: 1
+}
+
+.clear-fix:after {
+    display: block;
+    content: '';
+    clear: both;
+    height: 0;
+    visibility: hidden;
+}
+
+
+/*dialog 右下方button*/
+
+.bottomBtn {
+    float: right;
+    margin: 10px;
+}
+
+
+/*dialog button所在view*/
+
+.bottomView {
+    margin-bottom: -10px
+}
+
+
+/* common-color */
+.color-red{
+    color: #f00;
+}
+
+.color-orange{
+    color: #e6a23c;
+}
+
+.color-tips{
+    color: #f76a00;
+}
+
+/* common-font-size */
+.fz12{
+    font-size: 12px !important;
+}
+
+.fz14{
+    font-size: 14px;
+}
+
+.fz16{
+    font-size: 16px;
+}
+
+.fz18{
+    font-size: 18px;
+}
+
+/*删除*/
+
+.btn-delete {
+    color: #1296DB;
+    text-decoration: underline;
+    font-size: 12px;
+}
+
+
+/*uploadBtn 上传*/
+
+.btn-upload {
+    background-color: #f4f4f4;
+    color: #444;
+    border-color: #ddd;
+}
+
+
+/*btn-download下载*/
+
+.btn-download {
+    color: #1296DB;
+    text-decoration: underline;
+    font-size: 12px;
+}
+
+
+/*下拉选择框最小宽度为100px*/
+
+.select-min {
+    width: 100px;
+}
+
+.select-small {
+    width: 140px;
+}
+
+
+/*顶部控件相距20px */
+
+.right {
+    margin-right: 20px
+}
+
+
+/*学生姓名下载框*/
+
+.input-school-name {
+    width: 300px;
+}
+
+
+/*地址*/
+
+.input {
+    width: 180px;
+}
+
+.input-search {
+    width: 190px;
+}
+
+
+/*查询按钮*/
+
+.button-query {
+    width: 80px;
+}
+
+
+/*选择地区*/
+
+.select-area {
+    width: 140px;
+}
+
+
+.add-input{
+    width: 250px;
+}
+
+
+.register-btn {
+    width: 150px;
+}
+
+.form-desc {
+    font-size: 12px;
+    color: #999;
+}
+
+/**
+*input number 去掉上下箭头
+*/
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+}
+
+/* 汉字和数字衔接处换行问题 */
+span {
+  word-break: break-all;
+}
+
+
+.display-ib{
+    display: inline-block;
+}
+
+.border-dialog-footer{
+    border-top: 1px solid #eee;
+}

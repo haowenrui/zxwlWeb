@@ -1,0 +1,121 @@
+    .el-dialog__body {
+        padding: 0px 20px;
+        color: #606266;
+        line-height: 24px;
+        font-size: 14px;
+    }
+    /*时间空间样式调整*/
+    
+    .el-date-editor .el-range-input {
+        width: 35%;
+    }
+    /*.el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {*/
+    /*width: 220px;*/
+    /*}*/
+    
+    .el-date-editor .el-range-separator {
+        width: 10%;
+    }
+    
+    .el-date-editor .el-range__close-icon {
+        width: 15px;
+    }
+    
+    .el-date-editor.el-input,
+    .el-date-editor.el-input__inner {
+        width: 135px;
+    }
+    /*下来选择框的高度*/
+    
+    .el-select-dropdown__item {
+        height: 28px;
+        line-height: 28px;
+    }
+    /*table 上下左右居中*/
+    
+    .el-table th {
+        text-align: center;
+    }
+    
+    .el-table {
+        text-align: center;
+    }
+    /*
+    * input内容居中
+    */
+    
+    .el-input__inner {
+        padding: 6px 15px 6px 15px;
+    }
+    /*form校验错误提示*/
+    
+    .el-form-item__error {
+        font-size: 10px;
+        margin-top: 5px;
+    }
+    /*表单*/
+    
+    .el-form-item {
+        margin-bottom: 10px;
+    }
+    /*
+* form表单label字体大小
+*/
+    
+    .el-form-item__label {
+        font-size: 14px
+    }
+    /**
+*表单校验错误提示
+*/
+    
+    .el-form-item__error {
+        font-size: 10px;
+        padding-top: 0px;
+        margin-top: 0px;
+    }
+    /* 跑马灯指示器 */
+    
+    .el-carousel__indicators--outside button {
+        background-color: #1296DB;
+        height: 4px;
+        width: 30px;
+    }
+    /* 跑马灯内容显示区高度 */
+    
+    .el-carousel__container {
+        height: 326px;
+    }
+    
+    .el-carousel__item {
+        padding: 0px 20px 0px 20px;
+    }
+    
+    .el-carousel__arrow {
+        background-color: rgba(31, 45, 61, 0.3);
+        font-size: 14px;
+    }
+    
+    .el-carousel__arrow--left {
+        left: 5px;
+        margin-top: 20px;
+    }
+    
+    .el-carousel__arrow--right {
+        right: 5px;
+        margin-top: 20px;
+    }
+    /* transfer 高度 */
+    
+    .el-transfer-panel__body {
+        height: 300px;
+    }
+    
+    .el-transfer-panel__list {
+        height: 300px;
+    }
+    /* loading 的层级 */
+    
+    .el-loading-mask {
+        z-index: 99;
+    }

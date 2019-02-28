@@ -1,0 +1,53 @@
+@import "var";
+@import "../../../element-variables";
+.mt1 {
+  margin-top: $app-size1;
+}
+.mt2 {
+  margin-top: $app-size2;
+}
+.mt3 {
+  margin-top: $app-size3;
+}
+.mt4 {
+  margin-top: $app-size4;
+}
+
+.mb1 {
+  margin-bottom: $app-size1;
+}
+.mb2 {
+  margin-bottom: $app-size2;
+}
+.mb3 {
+  margin-bottom: $app-size3;
+}
+.mb4 {
+  margin-bottom: $app-size4;
+}
+
+.ml1 {
+  margin-left: $app-size1;
+}
+.ml2 {
+  margin-left: $app-size2;
+}
+.ml3 {
+  margin-left: $app-size3;
+}
+.ml4 {
+  margin-left: $app-size4;
+}
+.success {
+  color: $--color-success;
+}
+.warning {
+  color: $--color-warning;
+}
+.danger {
+  color: $--color-danger;
+}
+.info {
+  color: $--color-info;
+}
+
