@@ -3,9 +3,12 @@
 		<div>
 			<span>角色名称:</span>
 			<el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="商户ID/商户名称"></el-input>
-		</div>
+            <span>角色名称:</span>
+			<el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="商户ID/商户名称"></el-input>
+		
+        </div>
 		<div class="mt20">
-			<h2>选择角色最小操作单元：</h2>
+			<h2>权限清单：</h2>
 			<div>
 				<el-tree :data="permissionList" ref="roleTree" show-checkbox node-key="value" :default-expand-all="true" :default-checked-keys="queryParams.permissoinItemIds"
 				 :props="defaultProps">

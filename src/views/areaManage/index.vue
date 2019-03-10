@@ -88,9 +88,7 @@
                 this.dialogAdd = true;
             },
 			async deleteCompany() {
-				const response = await this.$http.delete(this.$urlApi.deleteCompony,{
-                    compIds: this.selectAreaId
-                });
+				const response = await this.$http.post(this.$urlApi.deleteCompony,this.selectAreaId);
                 if(response.result == 'SUCCESS'){
                     this.$message.success('删除成功');
                     this.getCompany();

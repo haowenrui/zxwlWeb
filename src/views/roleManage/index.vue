@@ -175,10 +175,7 @@ export default {
             this.multipleSelection.forEach(item => {
                 selectRoleId.push(item.roleId);
             });
-            const response = await this.$http.delete(this.$urlApi.deleteRole,{
-                roleIds: selectRoleId
-            }); 
-
+            const response = await this.$http.post(this.$urlApi.deleteRole,selectRoleId); 
             if(response.result == 'SUCCESS'){
                 this.$message.success('删除成功');
                 this.onQuery();
