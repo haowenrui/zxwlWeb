@@ -4,6 +4,24 @@
             <el-form-item label="片区名称:">
                 <el-input v-model.trim="form.name" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
+            <el-form-item label="所属区域:">
+                <el-input v-model.trim="form.regionCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="地址:">
+                <el-input v-model.trim="form.address" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="经度:">
+                <el-input v-model.trim="form.lon" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="纬度:">
+                <el-input v-model.trim="form.lat" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="负责人:">
+                <el-input v-model.trim="form.director" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="负责人电话:">
+                <el-input v-model.trim="form.directorTel" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
         </el-form>
         <div class="dialog-footer text-right pb20">
 			<el-button size="small" @click="cancel">取 消</el-button>

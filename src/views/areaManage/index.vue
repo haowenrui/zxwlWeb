@@ -19,8 +19,23 @@
 					<el-form-item label="片区名称:">
 						<span>{{companyInfo.name}}</span>
 					</el-form-item>
-					<el-form-item label="创建者:">
-						<span>{{companyInfo.name}}</span>
+					<el-form-item label="所属区域:">
+						<span>{{companyInfo.regionCode}}</span>
+					</el-form-item>
+					<el-form-item label="地址:">
+						<span>{{companyInfo.address}}</span>
+					</el-form-item>
+					<el-form-item label="经度:">
+						<span>{{companyInfo.lon}}</span>
+					</el-form-item>
+					<el-form-item label="纬度:">
+						<span>{{companyInfo.lat}}</span>
+					</el-form-item>
+					<el-form-item label="负责人:">
+						<span>{{companyInfo.director}}</span>
+					</el-form-item>
+					<el-form-item label="负责人电话:">
+						<span>{{companyInfo.directorTel}}</span>
 					</el-form-item>
 					<el-form-item label="创建时间:">
 						<span>{{companyInfo.dateCreated | dateFormatFilter}}</span>
