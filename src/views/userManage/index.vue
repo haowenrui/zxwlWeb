@@ -101,20 +101,30 @@ export default {
                     width: ''
                 },
                 {
-                    prop: 'companyName',
-                    label: '公司名称',
-                    width: ''
-                },
-                {
                     prop: 'name',
-                    label: '角色',
+                    label: '用户名称',
                     width: ''
                 },
                 {
                     prop: 'username',
-                    label: '用户名称',
+                    label: '账号',
                     width: ''
                 },
+                {
+                    prop: 'roleName',
+                    label: '角色名称',
+                    width: ''
+                },
+                {
+                    prop: 'roleType',
+                    label: '角色类型',
+                    width: ''
+                },
+                {
+                    prop: 'companyName',
+                    label: '公司名称',
+                    width: ''
+                }
             ],
             tBody:[]
         }

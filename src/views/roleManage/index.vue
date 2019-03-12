@@ -100,6 +100,11 @@ export default {
                     width: ''
                 },
                 {
+                    prop: 'type',
+                    label: '角色类型',
+                    width: ''
+                },
+                {
                     prop: 'companyName',
                     label: '公司名称',
                     width: ''
