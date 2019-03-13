@@ -1,7 +1,7 @@
 <template>
 	<div class="login">
 		<div class="bannder_home">
-			<!-- <a href="#"><img src="../../assets/images/logos.png" alt=""></a> -->
+			<span><img src="../../assets/images/logo.png" alt=""></span>
 		</div>
 		<div class="login-con">
 
@@ -127,15 +127,15 @@
         left: 0;
         z-index: 10;
 
-        & > a {
+        & > span {
             display: block;
             width: 1200px;
             margin: 0 auto;
             height: 70px;
 
             & > img {
-                height: 30px;
-                margin-top: 20px;
+                height: 40px;
+                margin-top: 12px;
             }
         }
     }

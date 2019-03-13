@@ -2,7 +2,7 @@ export default {
 
     getEnv() {
         let HOST = window.location.host;
-        if (HOST.indexOf('zxwl') != -1) {
+        if (HOST.indexOf('http://39.98.173.65:9000') != -1) {
             return 'prod';
         } else {
             return 'localhost';
@@ -11,7 +11,7 @@ export default {
     getHttpUrl() {
         let HTTPAPI = '';
         if (this.getEnv() == 'prod') {
-            HTTPAPI = window.location.origin;
+            HTTPAPI = 'http://39.98.173.65:9000';
         } else {
             HTTPAPI = '/api'; // 本地开发
         }

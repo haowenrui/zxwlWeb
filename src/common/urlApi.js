@@ -2,7 +2,6 @@ import env from './env'
 
 let BASE_URL = env.getHttpUrl()
 
-console.log(BASE_URL)
 
 let urlApi = {
     //登录
@@ -31,18 +30,9 @@ let urlApi = {
     editLoginAuth: '/user/editLoginAuthority',
     addUser: '/user/add',
     editUser: '/user/edit',
-
-    //设备管理
-    equipmentDelete: '/equipment/delete',
-    queryEquipmentInfo: '/equipment/findByDeviceCode',
-    equipmentList: '/equipment/findByPage',
-    importDevice: '/equipment/importDevice',
-    addEquipment: '/equipment/save',
-    modifyEquipment: '/equipment/update'
 }
 
 for (let key in urlApi) {
-	// urlApi[key] = BASE_URL + '/vue' + urlApi[key]
 	urlApi[key] = BASE_URL + urlApi[key]
 }
 export default urlApi

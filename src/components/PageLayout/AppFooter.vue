@@ -27,8 +27,8 @@
 <template lang="html">
   <section class="layout-footer">
     <div class="footer-fixed">
-      <p class="company">北京蝉鸣信息科技有限公司</p>
-      <p class="copyright">Copyright © imzhiliao.com. All rights reserved | 京ICP备14061569号</p>
+      <p class="company">zxwl</p>
+      <p class="copyright">Copyright 2018</p>
     </div>
   </section>
 </template>

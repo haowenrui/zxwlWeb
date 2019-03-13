@@ -66,9 +66,8 @@ export default {
             queryingShowLoading: false,
             importingShowLoading: false,
             queryParams: {
-                currPage: 1,
                 pageSize: 10,
-                pageNo: 1,
+                pageNumber: 1,
             },
             total: 0,
             pageSize: 10,
@@ -125,7 +124,7 @@ export default {
     },
     computed:{
         templateURL: function(){
-            return this.$urlApi.importDevice;
+            return this.$equApi.importDevice;
         }
     },
     created(){
@@ -187,7 +186,7 @@ export default {
                 this.$message.warning(message);
                 return;
             }
-            const response = await this.$http.get(this.$urlApi.equipmentList,this.queryParams); 
+            const response = await this.$http.get(this.$equApi.equipmentList,this.queryParams); 
             this.tBody = response.data.rows;
             this.total = response.data.total;
             this.queryParams.pageNo = response.data.pageNo;

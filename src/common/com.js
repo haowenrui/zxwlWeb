@@ -1,5 +1,6 @@
 import http from './http';
 import urlApi from './urlApi';
+import equApi from './equApi';
 import utils from './utils';
 import constants from '../tools/constants';
 import track from './track'
@@ -9,6 +10,7 @@ const Common = {
     // 包含两个参数：Vue 构造器，一个可选的选项对象
     install(Vue, options) {
         Vue.prototype.$urlApi = urlApi;
+        Vue.prototype.$equApi = equApi;
         Vue.prototype.$http = http;
         Vue.prototype.$utils = utils;
         Vue.prototype.$constants = constants;

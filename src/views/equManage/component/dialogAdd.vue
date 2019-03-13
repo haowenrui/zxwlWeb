@@ -75,15 +75,15 @@ export default {
             });
         },
         async queryEquipmentInfo(){
-            const response = await this.$http.get(this.$urlApi.queryEquipmentInfo,this.equipmentInfo.deviceId); 
+            const response = await this.$http.get(this.$equApi.queryEquipmentInfo,this.equipmentInfo.deviceId); 
             this.form = response.data;
         },
         async _addAndModifyEquipment(){
             let response = null;
             if(!this.equipmentInfo.deviceId){
-                response = await this.$http.post(this.$urlApi.addEquipment,this.form); 
+                response = await this.$http.post(this.$equApi.addEquipment,this.form); 
             }else{
-                response = await this.$http.post(this.$urlApi.modifyEquipment,this.form); 
+                response = await this.$http.post(this.$equApi.modifyEquipment,this.form); 
             }
             if(response.result == 'SUCCESS'){
                 this.$emit("update:show", false);

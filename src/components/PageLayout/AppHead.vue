@@ -19,7 +19,7 @@
 
     & > img{
         margin-left: 16px;
-        margin-top: 12px;
+        margin-top: 7px;
     }
   }
 
@@ -56,7 +56,7 @@
 	<section class="layout-head">
 		<div class="head-fixed clearfix">
 			<h1 class="logo fl">
-				<!-- <img height="35" src="../../assets/images/logos.png" alt=""> -->
+				<img height="40" src="../../assets/images/logo.png" alt="">
 			</h1>
 
 			<el-popover ref="popoverlogout" placement="bottom" width="160" v-model="visible">

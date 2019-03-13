@@ -166,10 +166,12 @@ export default {
      * @param {*} exceptionReturn 异常时是否返回
      */
     delete(url, data, exceptionReturn) {
+        // let finalUrl = url + '?' + qs.stringify(data);
+        // console.log(finalUrl)
         return instance.request({
             method: 'delete',
             url,
-            data: data,
+            data,
             headers: {
                 'X-Access-Token': jsGetCookie('_TOKEN_'),
             }
