@@ -18,8 +18,8 @@
         </el-form>
         <div>
             <div class="clear-fix mb10">
-                <el-button class="button-query fr" type="primary" @click="addNew" size="small">新增角色</el-button>
-                <el-button class="button-query fr mr10" type="warning" @click="deleteRole" size="small">删除角色</el-button>
+                <el-button class="button-query fr" type="primary" @click="addNew" size="small">新增用户</el-button>
+                <el-button class="button-query fr mr10" type="warning" @click="deleteRole" size="small">删除用户</el-button>
                 <!-- <el-button class="button-query fr" type="primary" size="small" @click="downloadSchoolImportModel">下载模板</el-button>
                 <el-upload class="button-query fr" :action='templateURL' :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload" :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="primary">批量导入</el-button>
@@ -101,20 +101,30 @@ export default {
                     width: ''
                 },
                 {
-                    prop: 'companyName',
-                    label: '公司名称',
-                    width: ''
-                },
-                {
                     prop: 'name',
-                    label: '角色',
+                    label: '用户名称',
                     width: ''
                 },
                 {
                     prop: 'username',
-                    label: '用户名称',
+                    label: '账号',
                     width: ''
                 },
+                {
+                    prop: 'roleName',
+                    label: '角色名称',
+                    width: ''
+                },
+                {
+                    prop: 'roleType',
+                    label: '角色类型',
+                    width: ''
+                },
+                {
+                    prop: 'companyName',
+                    label: '公司名称',
+                    width: ''
+                }
             ],
             tBody:[]
         }
