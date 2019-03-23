@@ -2,7 +2,7 @@ export default {
 
     getEnv() {
         let HOST = window.location.host;
-        if (HOST.indexOf('http://39.98.173.65') != -1) {
+        if (HOST == '39.98.173.65') {
             return 'prod';
         } else {
             return 'localhost';
