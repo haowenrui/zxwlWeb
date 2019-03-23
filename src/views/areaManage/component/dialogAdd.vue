@@ -25,8 +25,7 @@
         </el-form>
         <div class="dialog-footer text-right pb20">
 			<el-button size="small" @click="cancel">取 消</el-button>
-			<el-button v-if="!companyInfo.id" type="primary" @click="addNew" size="small">确 定</el-button>
-			<el-button v-if="companyInfo.id" type="primary" @click="modify" size="small">确 定</el-button>
+			<el-button type="primary" @click="submit" size="small">确 定</el-button>
 		</div>
     </div>
 </template>
@@ -36,7 +35,7 @@ export default {
     components:{
     },
     mixins: [],
-    props: ['companyInfo'],
+    props: ['companyInfo','optType'],
     data(){
         return {
             form: {
@@ -58,10 +57,10 @@ export default {
     created(){
     },
     mounted(){
-        if(this.companyInfo.id){
+        if(this.optType == 'modify'){
             this.form = this.companyInfo;
         }else{
-            this.form.parentId = this.companyInfo.parentId;
+            this.form.parentId = this.companyInfo.id;
         }
     },
     methods:{
@@ -87,6 +86,13 @@ export default {
         },
         cancel(){
             this.$emit('update:show',false)
+        },
+        submit(){
+            if(this.optType == 'add'){
+                this.addNew();
+            }else{
+                this.modify();
+            }
         }
     }
 }

@@ -1,14 +1,17 @@
 <template>
     <div>
         <el-form ref="form" :inline="true" :model="queryParams" size="small">
-            <el-form-item label="角色名称:" prop="name">
+            <el-form-item label="用户名称:" prop="name">
                 <el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="类型:" prop="type">
+            <!-- <el-form-item label="类型:" prop="type">
                 <el-select placeholder="请选择" class="select-method" v-model="queryParams.type">
                     <el-option key="" label="全部" value=""></el-option>
                     <el-option v-for="item in this.$constants.merchantTypeList" :label="item.label" :value="item.value" :key="item.value"></el-option>
                 </el-select>
+            </el-form-item> -->
+            <el-form-item label="账号:" prop="name">
+                <el-input v-model.trim="queryParams.username" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button class="button-query" type="primary" :loading="queryingShowLoading" @click="onQuery">查询
@@ -81,7 +84,8 @@ export default {
             dialogCheck: false,
             userInfo: {},
             queryParams: {
-                queryRequests: [],
+                name: '',
+                username: '',
                 pageSize: 10,
                 pageNumber: 1,
             },
@@ -95,11 +99,11 @@ export default {
                 }
             },
             tHead: [
-                {
-                    prop: 'userId',
-                    label: '编码',
-                    width: ''
-                },
+                // {
+                //     prop: 'userId',
+                //     label: '编码',
+                //     width: ''
+                // },
                 {
                     prop: 'name',
                     label: '用户名称',

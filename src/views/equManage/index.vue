@@ -14,7 +14,7 @@
             <div class="clear-fix mb10">
                 <el-button class="button-query fr" type="primary" @click="addNew" size="small">新增设备</el-button>
                 <el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small">删除设备</el-button>
-                <el-upload class="button-query fr" :action='templateURL' :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload" :disabled="importingShowLoading" :show-file-list="false">
+                <el-upload class="button-query fr" :action='templateURL' :headers="{'X-Access-Token': token}" :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload" :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入设备</el-button>
                 </el-upload>
                 <el-button class="button-query fr mr10" type="primary" size="small" @click="downloadEquTemplate">下载模板</el-button>
@@ -53,7 +53,8 @@
 <script>
 import { dateFormat, checkDateValid } from '@/tools/utils';
 import dialogAdd from './component/dialogAdd';
-import download from '@/mixins/downloadWitha'
+import download from '@/mixins/downloadWitha';
+import { jsGetCookie } from '@/tools/utils';
 
 export default {
     components:{
@@ -69,6 +70,7 @@ export default {
                 pageSize: 10,
                 pageNumber: 1,
             },
+            token: '',
             total: 0,
             pageSize: 10,
             currentPage: 1,
@@ -80,7 +82,7 @@ export default {
             },
             tHead: [
                 {
-                    prop: 'deviceCode',
+                    prop: 'deviceQRCode',
                     label: '设备编号',
                     width: ''
                 },
@@ -90,16 +92,26 @@ export default {
                     width: ''
                 },
                 {
-                    prop: 'merchantName',
-                    label: '角色名称',
+                    prop: 'proComName',
+                    label: '厂家名称',
                     width: ''
                 },
                 {
-                    prop: 'createTime',
-                    label: '修改时间',
+                    prop: 'proType',
+                    label: '产品类型',
+                    width: ''
+                },
+                {
+                    prop: 'insFrequency',
+                    label: '巡检频次',
+                    width: ''
+                },
+                {
+                    prop: 'overTime',
+                    label: '过保时间',
                     width: '',
                     formatter: (row, column,cellValue) => {
-                        return dateFormat("yyyy-MM-dd",new Date(cellValue*1000));
+                        return dateFormat("yyyy-MM-dd",new Date(cellValue));
                     }
                 },
                 {
@@ -111,9 +123,6 @@ export default {
                     prop: 'merchantType',
                     label: '修改者',
                     width: '',
-                    formatter: (row, column, cellValue) => {
-                        return merchantTypeFilter(cellValue);
-                    }
                 },
             ],
             tBody:[],
@@ -130,6 +139,7 @@ export default {
     created(){
     },
     mounted(){
+        this.token = jsGetCookie('_TOKEN_');
         this.queryEquipmentList();
     },
     methods:{
@@ -139,15 +149,40 @@ export default {
         },
         
         addNew(){
-             this.dialogAdd = true;
+            this.dialogAdd = true;
         },
-        deleteEquipment(){
+        async deleteEquipment(){
+            let selectArr = [];
+            if(this.multipleSelection.length <= 0){
+                return;
+            }else{
+                this.multipleSelection.forEach(item => {
+                    selectArr.push(item.deviceId);
+                });
+            }
+            const response = await this.$http.post(this.$equApi.deleteEquipment,selectArr); 
 
+            if (response.result == "SUCCESS") {
+                this.$message({
+                    showClose: true,
+                    message: '删除成功',
+                    type: "success"
+                });
+                this.multipleSelection = [];
+                this.onQuery();
+            } else {
+                this.$message({
+                    showClose: true,
+                    message: response.message,
+                    type: "error"
+                });
+            }
         },
         _checkSchoolInfo(info){
              
         },
         beforeUpload(file) {
+            this.token = jsGetCookie('_TOKEN_');
             this.importingShowLoading = true;
         },
         uploadSuccess(item) {
@@ -181,19 +216,19 @@ export default {
             this.queryEquipmentList();
         },
         async queryEquipmentList(){
-            let message = checkDateValid(this.queryParams.startTime,this.queryParams.endTime);
-            if (message) {
-                this.$message.warning(message);
-                return;
-            }
-            const response = await this.$http.get(this.$equApi.equipmentList,this.queryParams); 
-            this.tBody = response.data.rows;
+            // let message = checkDateValid(this.queryParams.startTime,this.queryParams.endTime);
+            // if (message) {
+            //     this.$message.warning(message);
+            //     return;
+            // }
+            const response = await this.$http.get(this.$equApi.equipmentList,this.queryParams);
+            this.tBody = response.data.equipmentList;
             this.total = response.data.total;
             this.queryParams.pageNo = response.data.pageNo;
         },
         _editSchoolInfo(info){
             this.equipmentInfo = info;
-            this.addNew = true;
+            this.dialogAdd = true;
         },
         handleSelectionChange(val) {
             this.multipleSelection = val;
@@ -202,9 +237,10 @@ export default {
             this.onQuery();
         },
         async downloadEquTemplate(){
-            // const response = await this.$http.get(this.$urlApi.downloadSchoolImportModel); 
-            // this.download(url)
-            
+            const response = await this.$http.post(this.$equApi.downloadTemplate,{
+                deviceName: '网关室水压'
+            }); 
+            // this.download(response.data)
         }
     }
 }

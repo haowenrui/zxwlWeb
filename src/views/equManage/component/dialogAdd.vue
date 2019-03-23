@@ -1,23 +1,50 @@
 <template>
     <div>
-        <el-form ref="form" :model="form" label-width="100px" size="mini">
-            <el-form-item label="设备编码:">
-                <el-input v-model.trim="form.deviceCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
-            </el-form-item>
+        <el-form ref="form" :model="form" :inline="true" label-width="100px" size="mini">
             <el-form-item label="设备名称:">
                 <el-input v-model.trim="form.deviceName" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="主机编号:">
-                <el-input v-model.trim="form.id" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            <el-form-item label="设备编码:">
+                <el-input v-model.trim="form.deviceQRCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="主机名称:">
-                <el-input v-model.trim="form.hostName" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            <el-form-item label="通信编号:">
+                <el-input v-model.trim="form.letterCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="安装片区:">
+            <el-form-item label="生产商:">
+                <el-input v-model.trim="form.proComName" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="厂家编码:">
+                <el-input v-model.trim="form.proComCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="产品类型:">
+                <el-input v-model.trim="form.proType" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="最小值:">
+                <el-input v-model.trim="form.minValue" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="最大值:">
+                <el-input v-model.trim="form.maxValue" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="通信协议:">
+                <el-input v-model.trim="form.letterAgreement" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="传输方式:">
+                <el-input v-model.trim="form.traMethod" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="是否模拟:">
+                <el-input v-model.trim="form.isSimulate" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="版本号:">
+                <el-input v-model.trim="form.version" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="巡检频次:">
                 <el-input v-model.trim="form.insFrequency" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="安装地址:">
-                <el-input v-model.trim="form.insLocation" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            <el-form-item label="过保时间:">
+                <el-input v-model.trim="form.overTime" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="消防设施:">
+                <el-input v-model.trim="form.fireFacility" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
         </el-form>
         <div class="dialog-footer text-right pb20">
@@ -36,12 +63,22 @@ export default {
     data(){
         return {
             form: {
-                deviceCode: '',
+                deviceId: this.equipmentInfo.equipmentInfo,
+                deviceQRCode: '',
                 deviceName: '',
-                id: '',
-                hostName: '',
+                letterCode: '',
+                proComName: '',
+                proComCode: '',
+                proType: '',
+                minValue: '',
+                maxValue: '',
+                letterAgreement: '',
+                traMethod: '',
+                isSimulate: '',
+                version: '',
                 insFrequency: '',
-                insLocation: ''
+                overTime: '',
+                fireFacility: ''
             }
         }
     },
@@ -75,7 +112,9 @@ export default {
             });
         },
         async queryEquipmentInfo(){
-            const response = await this.$http.get(this.$equApi.queryEquipmentInfo,this.equipmentInfo.deviceId); 
+            const response = await this.$http.get(this.$equApi.queryEquipmentInfo,{
+                equipmentId: this.equipmentInfo.deviceId
+            }); 
             this.form = response.data;
         },
         async _addAndModifyEquipment(){
@@ -87,7 +126,7 @@ export default {
             }
             if(response.result == 'SUCCESS'){
                 this.$emit("update:show", false);
-                this.$emit("refresh-data");
+                this.$emit("refreshData");
                 this.$message({
                     showClose: true,
                     message: "操作成功",

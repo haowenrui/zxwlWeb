@@ -39,6 +39,25 @@ let constants = {
         }
     ],
 
+    roleType: [
+        // {
+        //     name: '超级管理员',
+        //     value: 'SUPERADMIN'
+        // },
+        {
+            name: '管理员',
+            value: 'ADMIN'
+        },
+        {
+            name: '调试员',
+            value: 'INSTALLER'
+        },
+        {
+            name: '用户',
+            value: 'USER'
+        }
+    ]
+
 
 };
 

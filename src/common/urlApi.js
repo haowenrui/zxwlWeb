@@ -16,6 +16,7 @@ let urlApi = {
     queryListByCompCode: '/role/listByCompanyId',
     addRole: '/role/addEdit',
     deleteRole: '/role/delete',
+    queryRoleDetail: '/role/detail',
 
     //公司管理
     getCompany: '/company/companyTree',

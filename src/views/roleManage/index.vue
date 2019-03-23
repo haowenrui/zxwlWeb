@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="form" :inline="true" :model="queryParams" size="small">
+        <!-- <el-form ref="form" :inline="true" :model="queryParams" size="small">
             <el-form-item label="角色名称:" prop="name">
                 <el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
@@ -15,7 +15,7 @@
                 </el-button>
             </el-form-item>
 
-        </el-form>
+        </el-form> -->
         <div>
             <div class="clear-fix mb10">
                 <el-button class="button-query fr" type="primary" @click="addNew" size="small">新增角色</el-button>
@@ -51,7 +51,7 @@
 		</el-dialog>
 
         <el-dialog v-if="dialogCheck" title="查看" :visible.sync="dialogCheck" width="60%">
-			<dialogCheck :show.sync="dialogCheck" :roleInfo="roleInfo">
+			<dialogCheck :show.sync="dialogCheck" :roleId="roleInfo.roleId">
 			</dialogCheck>
 		</el-dialog>
     </div>
@@ -89,11 +89,11 @@ export default {
                 }
             },
             tHead: [
-                {
-                    prop: 'roleId',
-                    label: '序号',
-                    width: ''
-                },
+                // {
+                //     prop: 'roleId',
+                //     label: '序号',
+                //     width: ''
+                // },
                 {
                     prop: 'name',
                     label: '角色名称',

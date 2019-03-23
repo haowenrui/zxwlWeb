@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="area-list fl">
-			<el-tree :data="companyList" check-strictly show-checkbox default-expand-all node-key="value" ref="companyTree" highlight-current :props="defaultProps" @check="selectArea">
+			<el-tree :data="companyList" check-strictly show-checkbox default-expand-all node-key="value" ref="companyTree" highlight-current :props="defaultProps" @check="selectArea" @check-change="handleClick" :default-checked-keys="checkItem">
 			</el-tree>
 		</div>
 		<div class="area-info fl ml20">
@@ -51,7 +51,7 @@
 		</div>
 
         <el-dialog v-if="dialogAdd" :title="dialogTitle" :visible.sync="dialogAdd" width="60%">
-			<dialogAdd :show.sync="dialogAdd" :companyInfo="companyInfo" @refreshData="refreshData">
+			<dialogAdd :show.sync="dialogAdd" :optType="optType" :companyInfo="companyInfo" @refreshData="refreshData">
 			</dialogAdd>
 		</el-dialog>
 	</div>
@@ -70,12 +70,15 @@
                 dialogAdd: false,
                 dialogTitle: '',
 				companyInfo: {},
-				companyList: [],
+                companyList: [],
+                optType: 'add',
 				defaultProps: {
 					children: 'children',
 					label: 'label'
                 },
                 selectAreaId: '',
+                checkItem: [],
+                selectCount: 0
 			}
 		},
 		watch: {},
@@ -94,12 +97,14 @@
 				this.companyList = response.data;
 			},
 
-			async addNew() {
+			addNew() {
                 this.dialogTitle = '新增片区';
+                this.optType = 'add';
                 this.dialogAdd = true;
             },
             modify(){
                 this.dialogTitle = '编辑片区';
+                this.optType = 'modify';
                 this.dialogAdd = true;
             },
 			async deleteCompany() {
@@ -111,8 +116,9 @@
             },
             selectArea(data){
                 this.selectAreaId = '';
-                this.parentTree = [];
                 this.selectAreaId = data.value;
+                this.checkItem = [];
+                this.checkItem.push(data.value)
                 this.getCompanyInfo(this.selectAreaId)
             },
             async getCompanyInfo(companyId){
@@ -124,6 +130,19 @@
             refreshData(){
                 this.dialogAdd = false;
                 this.getCompany();
+            },
+            handleClick(data,checked, node) {
+                this.selectCount++;
+                if(this.selectCount%2==0){
+                    if(checked){
+                        this.$refs.companyTree.setCheckedNodes([]);
+                        this.$refs.companyTree.setCheckedNodes([data]);
+                        //交叉点击节点
+                    }else{
+                        this.$refs.companyTree.setCheckedNodes([]);
+                        //点击已经选中的节点，置空
+                    }
+                }
             }
 
 		}

@@ -37,6 +37,46 @@
 							<baidu-map class="bm-view" :theme="mapTheme" :center="map.center" :zoom="map.zoom" @ready="readyMap" :scroll-wheel-zoom="true">
                             </baidu-map>
 						</div>
+                        <div class="alrm-list">
+                            <ul>
+                                <li>
+                                    <div>
+                                        <span>烟杆报警</span>
+                                        <span class="color-red">待处理</span>
+                                    </div>
+                                    <div>
+                                        电子城片区
+                                    </div>
+                                    <div>
+                                        陕西省西安市电子城
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <span>烟杆报警</span>
+                                        <span class="color-red">待处理</span>
+                                    </div>
+                                    <div>
+                                        电子城片区
+                                    </div>
+                                    <div>
+                                        陕西省西安市电子城
+                                    </div>
+                                </li>
+                                <li>
+                                    <div>
+                                        <span>烟杆报警</span>
+                                        <span class="color-red">待处理</span>
+                                    </div>
+                                    <div>
+                                        电子城片区
+                                    </div>
+                                    <div>
+                                        陕西省西安市电子城
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
 					</div>
 				</div>
 				<div class="item-block">
@@ -67,7 +107,7 @@
 				</div>
 				<div class="item-block">
 					<div class="item-title">
-						报警中心
+						片区设备故障次数
 					</div>
 					<div class="item-cont">
 						<div id="alarmCenter"></div>
@@ -80,6 +120,7 @@
 
 <script>
     import ECharts from 'echarts';
+    import { jsGetCookie } from '@/tools/utils';
 	export default {
 		components: {
 		},
@@ -500,12 +541,20 @@
                     }
                 ],
                 points: [],
+                websock: null,
+                areaCode: ''
 			}
 		},
 		watch: {},
 		computed: {},
-		created() {},
+		created() {
+            this.initWebSocket();
+        },
+        destroyed(){
+            this.websock.onclose()
+        },
 		mounted() {
+            this.areaCode = jsGetCookie('_CURRENT_COMPANY_AREA_');
 			this.alarmTypeChart();
 			this.equErrorCharts();
 			this.equTypeCharts();
@@ -555,31 +604,18 @@
                 var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象 
                 map.openInfoWindow(infoWindow,point); //开启信息窗口
             },
-			alarmTypeChart(data) {
-				let ele = document.getElementById("alarmType");
-				let legendData = ['支付宝信用卡', '支付宝储蓄卡', '支付宝花呗', '支付宝花呗分期', '支付宝余额'];
-				let seriesName = '支付宝支付渠道';
-				let seriesData = [{
-						value: 335,
-						name: '支付宝信用卡'
-					},
-					{
-						value: 310,
-						name: '支付宝储蓄卡'
-					},
-					{
-						value: 234,
-						name: '支付宝花呗'
-					},
-					{
-						value: 135,
-						name: '支付宝花呗分期'
-					},
-					{
-						value: 1548,
-						name: '支付宝余额'
-					}
-				];
+			async alarmTypeChart(data) {
+                let ele = document.getElementById("alarmType");
+                const res = await this.$http.post(this.$equApi.alarmStatistics,{
+                    areaCode: this.areaCode,
+                    isSubArea: true
+                })
+                let legendData = [];
+                res.data.forEach(item => {
+                    legendData.push(item.name);
+                });
+				let seriesName = '报警类型统计';
+				let seriesData = res.data;
 				this._renderPieCharts(ele, legendData, seriesName, seriesData)
 			},
 			_renderPieCharts(ele, legendData, seriesName, seriesData) {
@@ -638,15 +674,35 @@
 				};
 				charts.setOption(option);
 			},
-			equErrorCharts() {
-				let ele = document.getElementById("equError");
-				this._renderCircleCharts(ele);
+			async equErrorCharts() {
+                let ele = document.getElementById("equError");
+                const res = await this.$http.post(this.$equApi.failureRateStatistics,{
+                    areaCode: this.areaCode,
+                    isSubArea: true
+                })
+                let seriesName = '设备故障率';
+                let legendData = [];
+                res.data.forEach(item => {
+                    legendData.push(item.name);
+                });
+                let seriesData = res.data;
+				this._renderCircleCharts(ele,seriesName,seriesData,legendData);
 			},
-			equTypeCharts() {
-				let ele = document.getElementById("equType");
-				this._renderCircleCharts(ele);
+			async equTypeCharts() {
+                let ele = document.getElementById("equType");
+                const res = await this.$http.post(this.$equApi.deviceTypeStatistics,{
+                    areaCode: this.areaCode,
+                    isSubArea: true
+                })
+                let seriesName = '设备型号统计';
+                let legendData = [];
+                res.data.forEach(item => {
+                    legendData.push(item.name);
+                });
+                let seriesData = res.data;
+				this._renderCircleCharts(ele,seriesName,seriesData,legendData);
 			},
-			_renderCircleCharts(ele) {
+			_renderCircleCharts(ele,seriesName,seriesData,legendData) {
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
@@ -665,14 +721,14 @@
 					legend: {
 						orient: 'vertical',
 						x: 'left',
-						data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎'],
+						data: legendData,
 						textStyle: {
 							color: '#fff',
 							fontSize: 10
 						}
 					},
 					series: [{
-						name: '访问来源',
+						name: seriesName,
 						type: 'pie',
 						radius: ['25%', '65%'],
 						avoidLabelOverlap: false,
@@ -694,41 +750,44 @@
 								show: false
 							}
 						},
-						data: [{
-								value: 335,
-								name: '直接访问'
-							},
-							{
-								value: 310,
-								name: '邮件营销'
-							},
-							{
-								value: 234,
-								name: '联盟广告'
-							},
-							{
-								value: 135,
-								name: '视频广告'
-							},
-							{
-								value: 1548,
-								name: '搜索引擎'
-							}
-						]
+						data: seriesData
 					}]
 				};
 				charts.setOption(option);
 			},
-			newEquCharts() {
+			async newEquCharts() {
 				let ele = document.getElementById("newEqu");
-				let xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-				let seriesData = [120, 200, 150, 80, 70, 110, 130];
+                const res = await this.$http.post(this.$equApi.devicesStatistics,{
+                    areaCode: this.areaCode,
+                    isSubArea: true
+                })
+
+                let xData = [];
+                let seriesData = [];
+
+                res.data.forEach(item => {
+                    xData.push(item.name);
+                    seriesData.push(item.value)
+                });
+                
 				this._renderBarCharts(ele, xData, seriesData);
 			},
-			alarmCenterCharts() {
+			async alarmCenterCharts() {
 				let ele = document.getElementById("alarmCenter");
-				let xData = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-				let seriesData = [120, 200, 150, 80, 70, 110, 130];
+                
+                const res = await this.$http.post(this.$equApi.failureCountStatistics,{
+                    areaCode: this.areaCode,
+                    isSubArea: true
+                })
+
+                let xData = [];
+                let seriesData = [];
+
+                res.data.forEach(item => {
+                    xData.push(item.name);
+                    seriesData.push(item.value)
+                });
+                
 				this._renderBarCharts(ele, xData, seriesData);
 			},
 			_renderBarCharts(ele, xData, seriesData) {
@@ -939,7 +998,33 @@
 					series: seriesData
 				};
 				charts.setOption(option);
-			}
+            },
+            initWebSocket(){ //初始化weosocket
+                const wsuri = 'ws://39.98.173.65:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_ID_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
+                this.websock = new WebSocket(wsuri);        
+                this.websock.onmessage = this.websocketonmessage;        
+                this.websock.onopen = this.websocketonopen;        
+                this.websock.onerror = this.websocketonerror;        
+                this.websock.onclose = this.websocketclose;
+            },
+            websocketonopen(){ //连接建立之后执行send方法发送数据
+                console.log("WebSocket连接成功");
+                this.websocketsend('111');
+            },
+            websocketonerror(){//连接建立失败重连
+                console.log("WebSocket连接发生错误");
+                this.initWebSocket();
+            },
+            websocketonmessage(e){ //数据接收
+                const redata = e.data;
+                console.log(e.data);
+            },
+            websocketsend(Data){//数据发送
+                this.websock.send(Data);
+            },
+            websocketclose(e){  //关闭
+                console.log('断开连接',e);
+            },
 		}
 	}
 
@@ -960,6 +1045,28 @@
 		box-shadow: 0px 0px 10px #034c6a inset;
 		position: relative;
 	}
+
+    .alrm-list{
+        position: absolute;
+        top: 20px;
+        left: 0px;
+        width: 180px;
+        height: 280px;
+        overflow: hidden;
+        
+        li{
+            padding: 10px;
+            background: rgba(0,0,0,.6);
+            margin-bottom: 20px;
+            border: 1px solid #333;
+            width: 100%;
+            max-height: 100px;
+        }
+    }
+
+    .item-cont{
+        position: relative;
+    }
 
 	.item-title {
 		color: #e7c93d;

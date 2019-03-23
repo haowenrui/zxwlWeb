@@ -2,12 +2,12 @@
     <div>
         <el-form label-width="100px" size="mini">
             <el-form-item label="角色名称:">
-                <span>11111</span>
+                <span>{{roleInfo.name}}</span>
             </el-form-item>
             <el-form-item label="类型:">
-                <span>11111</span>
+                <span>{{roleInfo.type}}</span>
             </el-form-item>
-            <el-form-item label="创建者:">
+            <!-- <el-form-item label="创建者:">
                 <span>11111</span>
             </el-form-item>
             <el-form-item label="创建时间:">
@@ -18,14 +18,20 @@
             </el-form-item>
             <el-form-item label="修改时间:">
                 <span>11111</span>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="角色权限:">
                 <div>
                     <p>角色最小操作单元</p>
-                    <div>1111</div>
+                    <div>
+                        <el-tree :data="roleInfo.permissionItem" node-key="value" :default-expand-all="false" :props="defaultProps"></el-tree>
+                    </div>
                 </div>
             </el-form-item>
         </el-form>
+
+        <div class="dialog-footer text-right pb20">
+			<el-button size="small" @click="cancel">关 闭</el-button>
+		</div>
     </div>
 </template>
 
@@ -37,7 +43,11 @@ export default {
     props: ['roleId'],
     data(){
         return {
-            roleInfo: {}
+            roleInfo: {},
+            defaultProps: {
+                children: 'children',
+                label: 'label'
+            },
         }
     },
     watch:{
@@ -47,6 +57,7 @@ export default {
     created(){
     },
     mounted(){
+        this.queryRoleDetail();
         this.getCurrentPermission();
     },
     methods:{
@@ -58,6 +69,17 @@ export default {
 
             this.roleInfo = response.data;
 
+        },
+        async queryRoleDetail(){
+            const response = await this.$http.get(this.$urlApi.queryRoleDetail,{
+                roleId: this.roleId,
+            }); 
+
+            this.roleInfo = response.data;
+
+        },
+        cancel(){
+            this.$emit('update:show',false);
         }
     }
 }

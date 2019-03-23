@@ -25,7 +25,7 @@ export default new Router({
         // 默认首页
         {
             path: "/",
-            redirect: "/roleManage",
+            redirect: "/login",
             hidden: true
         },
         
@@ -114,19 +114,11 @@ export default new Router({
         },
 
         {
-            path: "/",
-            component: Layout,
-            redirect: "/alarmManage",
-            noDropdown: false, //只有一个节点
-            children: [
-                {
-                    path: "/alarmManage",
-                    component: AlarmManage,
-                    name: "报警中心"
-                }
-            ]
+            path: "/alarmManage",
+            name: "alarmManage",
+            component: Home,
+            name: "报警中心"
         },
-
        
     ]
 });
