@@ -103,7 +103,8 @@
 		mounted() {
             this.companyId = jsGetCookie('_CURRENT_COMPANY_ID_');
             this.companyName = decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));
-			this.queryCompanyList();
+            this.queryCompanyList();
+            this.queryCurrentPermission();
 		},
 		methods: {
 			async logout() {
@@ -122,6 +123,13 @@
 				if (res.result == 'SUCCESS') {
                     this.companyList = res.data;
 				}
+            },
+            async queryCurrentPermission(){
+				const res = await this.$http.get(this.$urlApi.queryCurrentPermission,{
+                    type: 'WEB',
+                    companyId: this.companyId
+                });
+
             },
             changeCompany(){
                 // var href = window.location.href;

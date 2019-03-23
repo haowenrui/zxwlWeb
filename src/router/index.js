@@ -11,12 +11,12 @@ const AreaManage = () =>
     import ("@/views/areaManage/index");
 const DataStatistics = () =>
     import ("@/views/dataStatistics/index");
-const Home = () =>
+const AlarmManage = () =>
     import ("@/views/home/index");
 const EquipmentManage = () =>
     import ("@/views/equManage/index");
-const AlarmManage = () =>
-    import ("@/views/alarmManage/index");
+// const AlarmManage = () =>
+//     import ("@/views/alarmManage/index");
 
 Vue.use(Router)
 
@@ -36,12 +36,12 @@ export default new Router({
             name: "登录"
         },
 
-        {
-            path: "/home",
-            name: "home",
-            component: Home,
-            name: "报警中心"
-        },
+        // {
+        //     path: "/home",
+        //     name: "home",
+        //     component: Home,
+        //     name: "报警中心"
+        // },
 
         {
             path: "/",
@@ -116,7 +116,7 @@ export default new Router({
         {
             path: "/alarmManage",
             name: "alarmManage",
-            component: Home,
+            component: AlarmManage,
             name: "报警中心"
         },
        

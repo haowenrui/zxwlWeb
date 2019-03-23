@@ -37,42 +37,18 @@
 							<baidu-map class="bm-view" :theme="mapTheme" :center="map.center" :zoom="map.zoom" @ready="readyMap" :scroll-wheel-zoom="true">
                             </baidu-map>
 						</div>
-                        <div class="alrm-list">
+                        <div class="alrm-list" v-if="alarmList.length > 0">
                             <ul>
-                                <li>
+                                <li v-for="(item,index) in alarmList" :key="index">
                                     <div>
-                                        <span>烟杆报警</span>
-                                        <span class="color-red">待处理</span>
+                                        <span>{{item.deviceName}}</span>
+                                        <span class="color-red">{{item.alarmStatus}}</span>
                                     </div>
                                     <div>
-                                        电子城片区
+                                        {{item.companyName}}
                                     </div>
                                     <div>
-                                        陕西省西安市电子城
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <span>烟杆报警</span>
-                                        <span class="color-red">待处理</span>
-                                    </div>
-                                    <div>
-                                        电子城片区
-                                    </div>
-                                    <div>
-                                        陕西省西安市电子城
-                                    </div>
-                                </li>
-                                <li>
-                                    <div>
-                                        <span>烟杆报警</span>
-                                        <span class="color-red">待处理</span>
-                                    </div>
-                                    <div>
-                                        电子城片区
-                                    </div>
-                                    <div>
-                                        陕西省西安市电子城
+                                        {{item.companyAddress}}
                                     </div>
                                 </li>
                             </ul>
@@ -542,7 +518,9 @@
                 ],
                 points: [],
                 websock: null,
-                areaCode: ''
+                areaCode: '',
+                alarmList: [],
+                connectFlag: true
 			}
 		},
 		watch: {},
@@ -551,7 +529,8 @@
             this.initWebSocket();
         },
         destroyed(){
-            this.websock.onclose()
+            this.connectFlag = false;
+            this.websocketclose();
         },
 		mounted() {
             this.areaCode = jsGetCookie('_CURRENT_COMPANY_AREA_');
@@ -567,6 +546,7 @@
 			readyMap({BMap,map}) {
                 var myIcon = new BMap.Icon("/static/favicon.ico", new BMap.Size(30,15));
                 this.addPoints(BMap,map,myIcon);
+                this.addPoints(BMap,map)
             },
             addPoints (BMap,map,myIcon) {
                 // 随机向地图添加25个标注
@@ -1000,7 +980,9 @@
 				charts.setOption(option);
             },
             initWebSocket(){ //初始化weosocket
-                const wsuri = 'ws://39.98.173.65:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_ID_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
+                const wsuri = 'ws://192.168.1.105:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_AREA_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
+                // const wsuri = 'ws://39.98.173.65:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_AREA_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
+                console.log(wsuri);
                 this.websock = new WebSocket(wsuri);        
                 this.websock.onmessage = this.websocketonmessage;        
                 this.websock.onopen = this.websocketonopen;        
@@ -1016,14 +998,30 @@
                 this.initWebSocket();
             },
             websocketonmessage(e){ //数据接收
-                const redata = e.data;
-                console.log(e.data);
+                console.log('数据接收',e);
+                if(e.data.alarmId){
+                    const redata = JSON.parse(e.data)
+                    this.alarmList.forEach(item => {
+                        if(item.alarmId == redata.alarmId){
+                            return;
+                        }
+                    })
+                    if(this.alarmList.length > 1){
+                        this.alarmList.splice(2);
+                    }
+                    this.alarmList.push(redata)
+                }
+
             },
             websocketsend(Data){//数据发送
                 this.websock.send(Data);
             },
             websocketclose(e){  //关闭
                 console.log('断开连接',e);
+                // if(this.connectFlag){
+                //     console.log('重新连接');
+                //     this.initWebSocket();
+                // }
             },
 		}
 	}

@@ -24,6 +24,7 @@ let urlApi = {
     addCompony: '/company/add',
     editCompony: '/company/edit',
     deleteCompony: '/company/delete',
+    queryCurrentPermission: '/company/selectCompany',
 
     //用户管理
     getUserList: '/user/list',
