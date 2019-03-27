@@ -1,7 +1,6 @@
 import env from './env'
 
 let BASE_URL = 'http://39.98.173.65:9001';
-// let BASE_URL = 'http://192.168.1.104:9001';
 
 
 let equApi = {
@@ -15,6 +14,7 @@ let equApi = {
     deleteEquipment: '/equipment/delete',
     downloadTemplate: '/equipment/downloadTemplate',
 
+    alarmList: '/alarm/list',
     alarmStatistics: '/statistics/alarmType',
     deviceTypeStatistics: '/statistics/deviceType',
     devicesStatistics:'/statistics/devices',

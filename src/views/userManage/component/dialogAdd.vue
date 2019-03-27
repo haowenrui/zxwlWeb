@@ -4,9 +4,9 @@
 			<el-form-item label="账号:">
 				<el-input v-model.trim="form.username" :disabled="optType == 'edit'" clearable class="input-search" size="small" placeholder="请输入"></el-input>
 			</el-form-item>
-			<!-- <el-form-item label="密码:">
+			<el-form-item label="密码:">
 				<el-input v-model.trim="form.password" clearable class="input-search" size="small" placeholder="请输入"></el-input>
-			</el-form-item> -->
+			</el-form-item>
             <el-form-item label="用户名:">
 				<el-input v-model.trim="form.name" clearable class="input-search" size="small" placeholder="请输入"></el-input>
 			</el-form-item>

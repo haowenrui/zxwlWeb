@@ -61,6 +61,7 @@
 import { dateFormat, checkDateValid } from '@/tools/utils';
 import dialogAdd from './component/dialogAdd';
 import dialogCheck from './component/dialogCheck';
+import {  userTypeFilter } from '@/filters/index';
 
 
 export default {
@@ -102,7 +103,10 @@ export default {
                 {
                     prop: 'type',
                     label: '角色类型',
-                    width: ''
+                    width: '',
+                    formatter: (row, column,cellValue) => {
+                        return userTypeFilter(cellValue)
+                    }
                 },
                 {
                     prop: 'companyName',

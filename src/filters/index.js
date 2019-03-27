@@ -27,3 +27,24 @@ let dateFormatFilter = (value, format) => {
     }
 };
 export { dateFormatFilter }
+
+
+let userTypeFilter = (type) => {
+    let result = '';
+    switch(type){
+        case 'SUPERADMIN':
+            result = '超级管理员';
+            break;
+        case 'ADMIN':
+            result = '管理员';
+            break;
+        case 'INSTALLER':
+            result = '调试员';
+            break;
+        case 'USER':
+            result = '用户';
+            break;
+    }
+    return result;
+};
+export { userTypeFilter }

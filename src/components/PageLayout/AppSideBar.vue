@@ -57,12 +57,20 @@
 					</router-link>
 				</el-submenu>
 
-				<router-link class="links" v-if="!item.children || item.children.length == 0" :to="item.path">
-					<el-menu-item :index="item.path">
-						<i :class="item.icon"></i>{{item.name}} 
-					</el-menu-item>
-				</router-link>
-
+                <template v-if="item.name === '报警中心'">
+                    <router-link class="links" tag="a" target="_blank" v-if="!item.children || item.children.length == 0" :to="item.path">
+                        <el-menu-item :index="item.path">
+                            <i :class="item.icon"></i>{{item.name}} 
+                        </el-menu-item>
+                    </router-link>
+                </template>
+                <template v-else>
+                    <router-link class="links" v-if="!item.children || item.children.length == 0" :to="item.path">
+                        <el-menu-item :index="item.path">
+                            <i :class="item.icon"></i>{{item.name}} 
+                        </el-menu-item>
+                    </router-link>
+                </template>
 
 			</template>
 		</el-menu>

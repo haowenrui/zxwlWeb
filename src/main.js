@@ -15,14 +15,19 @@ import './assets/css/element-override.css';
 import './assets/font-awesome/css/font-awesome.css';
 import Common from './common/com';
 import * as filters from './filters/index';
-import BaiduMap from 'vue-baidu-map';
 
+import VueAMap from 'vue-amap';
 
 Vue.use(ElementUI);
 Vue.use(Common);
-Vue.use(BaiduMap,{
-    ak: 'BZVuuofxGfmKM1SpcLt8jzceVmQYKaAs'
-})
+Vue.use(VueAMap);
+VueAMap.initAMapApiLoader({
+    key: 'e4ef0223eccf4a616044accca024960f',
+    mapStyle: 'amap://styles/2daab02a809fa46d3675bb16d22b771c',
+    plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+    // 默认高德 sdk 版本为 1.4.4
+    v: '1.4.4'
+  });
 
 // NProgress.inc(0.2)
 // NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
