@@ -601,8 +601,8 @@
 				charts.setOption(option);
             },
             initWebSocket(){ //初始化weosocket
-                const wsuri = 'ws://192.168.1.105:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_AREA_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
-                // const wsuri = 'ws://39.98.173.65:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_AREA_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
+                // const wsuri = 'ws://192.168.1.105:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_AREA_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
+                const wsuri = 'ws://39.98.173.65:9001/alarm.ws?token=' + jsGetCookie('_TOKEN_')  + '&loginType=WEB&company=' + jsGetCookie('_CURRENT_COMPANY_AREA_')  + '&userName=' + decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));        
                 console.log(wsuri);
                 this.websock = new WebSocket(wsuri);        
                 this.websock.onmessage = this.websocketonmessage;        
@@ -631,6 +631,16 @@
                         this.alarmList.splice(2);
                     }
                     this.alarmList.push(redata)
+
+                    self.markersFire.push({
+                        position: [redata.lon,redata.lat],
+                        visible: true,
+                        events: {
+                            click() {
+                                alert(redata.name + '-' + redata.address)
+                            }
+                        }
+                    })
                 }
 
             },

@@ -59,9 +59,16 @@
 				<img height="40" src="../../assets/images/logo.png" alt="">
 			</h1>
 
-			<el-popover ref="popoverlogout" placement="bottom" width="160" v-model="visible">
-				<div style="text-align: right; margin: 0">
-					<el-button size="mini" type="primary" plain @click="logout">退出</el-button>
+			<el-popover ref="popoverlogout" placement="bottom" width="140" v-model="visible">
+				<div class="text-center">
+                    <ul>
+                        <li>
+					        <el-button class="mb10 select-min" size="mini" type="primary" plain @click="modifyPwdVisible = true">修改密码</el-button>
+                        </li>
+                        <li>
+					        <el-button class="select-min" size="mini" type="primary" plain @click="logout">退出</el-button>
+                        </li>
+                    </ul>
 				</div>
 			</el-popover>
 			<el-button type="text" class="button-user fr" v-if="companyName"
@@ -75,8 +82,27 @@
                     </el-option>
                 </el-select>
             </div>
-
 		</div>
+
+        <el-dialog v-if="modifyPwdVisible" title="修改密码" :visible.sync="modifyPwdVisible" width="60%">
+			<div class="clearfix mt10 mb10">
+                <el-form :model="modifyPwdForm" size="small" :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="旧密码" prop="oldPassword">
+                        <el-input type="password" class="input-school-name" v-model="modifyPwdForm.oldPassword" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="新密码" prop="password">
+                        <el-input type="password" class="input-school-name" v-model="modifyPwdForm.password" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认密码" prop="checkPwd">
+                        <el-input type="password" class="input-school-name" v-model="modifyPwdForm.checkPwd" autocomplete="off"></el-input>
+                    </el-form-item>
+                </el-form>
+			</div>
+			<span slot="footer" class="dialog-footer">
+				<el-button type="default" @click="modifyPwdVisible = false" size="small">取消</el-button>
+				<el-button type="primary" @click="submit" size="small">确定</el-button>
+			</span>
+		</el-dialog>
 	</section>
 </template>
 
@@ -90,11 +116,38 @@
 	export default {
 		name: 'appHead',
 		data() {
+            var validatePass2 = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请再次输入密码'));
+                } else if (value !== this.modifyPwdForm.password) {
+                    callback(new Error('两次输入密码不一致!'));
+                } else {
+                    callback();
+                }
+            };
 			return {
                 visible: false,
+                modifyPwdVisible: false,
                 companyList: [],
                 companyId: '',
-                companyName: ''
+                companyName: '',
+                modifyPwdForm: {
+                    oldPassword: '',
+                    password: '',
+                    checkPwd: '',
+                    userId: ''
+                },
+                rules2: {
+                    oldPassword: [
+                        { required: true,message: '请输入旧密码', trigger: 'blur' }
+                    ],
+                    password: [
+                        { required: true,message: '请输入新密码', trigger: 'blur' }
+                    ],
+                    checkPwd: [
+                        { required: true,validator: validatePass2, trigger: 'blur' }
+                    ],
+                }
 			}
 		},
 		created() {
@@ -111,7 +164,11 @@
 				const res = await this.$http.post(this.$urlApi.logout);
 				if (res.result == 'SUCCESS') {
 					this.visible = false;
-					jsDeleteCookie('_TOKEN_');
+                    jsDeleteCookie('_TOKEN_');
+                    jsDeleteCookie('_CURRENT_COMPANY_ID_');
+                    jsDeleteCookie('_CURRENT_COMPANY_NAME_');
+                    jsDeleteCookie('_CURRENT_COMPANY_AREA_');
+                    jsDeleteCookie('_CURRENT_USER_ID_');
 					document.title = 'zxwl';
 					this.$router.push({
 						path: 'login'
@@ -146,6 +203,22 @@
                 })
                 jsAddCookie('_CURRENT_COMPANY_NAME_',this.companyName);
                 window.location.reload()
+            },
+            submit(){
+                this.$refs.ruleForm2.validate(value => {
+                    if(value){
+                        this.modifyPwd();
+                    }
+                })
+            },
+            async modifyPwd(){
+                this.modifyPwdForm.userId = jsGetCookie('_CURRENT_USER_ID_');
+                const res = await this.$http.post(this.$urlApi.modifyPwd,this.modifyPwdForm);
+                if(res.status == 'SUCCESS'){
+                    this.$message.success('修改成功');
+                    this.modifyPwdVisible = false;
+                    this.$refs.ruleForm2.resetFields();
+                }
             }
 		}
 	}

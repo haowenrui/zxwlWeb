@@ -103,6 +103,7 @@
                     jsAddCookie('_CURRENT_COMPANY_ID_',res.data._user.company.id);
                     jsAddCookie('_CURRENT_COMPANY_NAME_',res.data._user.company.name);
                     jsAddCookie('_CURRENT_COMPANY_AREA_',res.data._user.company.code);
+                    jsAddCookie('_CURRENT_USER_ID_',res.data._user.companyUser.userId);
 
                     this.$router.replace({
                         // path: '/home'

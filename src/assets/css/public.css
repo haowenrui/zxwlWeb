@@ -130,6 +130,22 @@ i{
     padding-right: 20px;
 }
 
+.pt30 {
+    padding-top: 30px;
+}
+
+.pb30 {
+    padding-bottom: 30px;
+}
+
+.pl30 {
+    padding-left: 30px;
+}
+
+.pr30 {
+    padding-right: 30px;
+}
+
 
 /* common margin */
 
