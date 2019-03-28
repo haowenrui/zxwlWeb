@@ -19,7 +19,8 @@ let equApi = {
     deviceTypeStatistics: '/statistics/deviceType',
     devicesStatistics:'/statistics/devices',
     failureCountStatistics: '/statistics/failureCount',
-    failureRateStatistics: '/statistics/failureRate'
+    failureRateStatistics: '/statistics/failureRate',
+    monthlyAlarmStatistics: '/statistics/monthlyAlarm'
 }
 
 for (let key in equApi) {
