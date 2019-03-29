@@ -57,12 +57,12 @@
 		<el-dialog v-if="uploadAndDownload" title="上传与下载" :visible.sync="uploadAndDownload" width="60%">
 			<div class="clearfix mt10 mb10 pl30">
 				<el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 50%">
-					<el-option v-for="item in equList" :key="item.value" :label="item.label" :value="item.value">
+					<el-option v-for="item in this.$constants.equType" :key="item.value" :label="item.name" :value="item.value">
 					</el-option>
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
                 </el-button>
-                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}"
+                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token,'Content-Type': 'application/json'}" :data="{deviceName: uploadType}"
                 :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload"
                 :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入设备

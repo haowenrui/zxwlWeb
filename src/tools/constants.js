@@ -56,6 +56,46 @@ let constants = {
             name: '用户',
             value: 'USER'
         }
+    ],
+
+    equType: [
+        {
+            name: 'NB烟感',
+            value: 'nbSmoke '
+        },
+        {
+            name: 'NB气感',
+            value: 'nbGasSense '
+        },
+        {
+            name: 'NB温感',
+            value: 'nbTemperatureSense'
+        },
+        {
+            name: 'NB水压',
+            value: 'nbWaterPressure'
+        },
+        {
+            name: '网关室水压',
+            value: 'gatewayRoomWaterPressure'
+        },
+        {
+            name: '水压小主机',
+            value: 'waterPressureSmallHost'
+        },
+        {
+            name: '电器火灾主机',
+            value: 'electricalFireHost'
+        },
+        {
+            name: '用户传输主机',
+            value: 'userTransferHost'
+        },
+        {
+            name: '九小小主机',
+            value: 'nineSmallHosts'
+        },
+
     ]
 
 
