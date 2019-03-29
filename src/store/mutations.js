@@ -12,4 +12,8 @@ export default {
     setMenus(state, meuns) {
         state.menus = meuns;
     },
+
+    setPermissionList(state, list) {
+        state.permissionList = list;
+    }
 }

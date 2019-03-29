@@ -111,7 +111,11 @@
         jsAddCookie,
         jsGetCookie,
 		jsDeleteCookie
-	} from '@/tools/utils';
+    } from '@/tools/utils';
+    import {
+		mapState,
+		mapMutations
+    } from "vuex";
 
 	export default {
 		name: 'appHead',
@@ -149,7 +153,10 @@
                     ],
                 }
 			}
-		},
+        },
+        computed: {
+            ...mapState(["permissionList"])
+        },
 		created() {
 
 		},
@@ -160,6 +167,7 @@
             this.queryCurrentPermission();
 		},
 		methods: {
+            ...mapMutations(["setPermissionList"]),
 			async logout() {
 				const res = await this.$http.post(this.$urlApi.logout);
 				if (res.result == 'SUCCESS') {
@@ -187,6 +195,7 @@
                     companyId: this.companyId
                 });
 
+                this.setPermissionList(res.data);
             },
             changeCompany(){
                 // var href = window.location.href;

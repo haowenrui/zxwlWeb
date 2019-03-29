@@ -6,9 +6,9 @@
 		</div>
 		<div class="area-info fl ml20">
 			<div class="clear-fix mb10">
-				<el-button class="button-query fl" type="primary" @click="addNew" size="small">新增片区</el-button>
-				<el-button class="button-query fl" type="primary" @click="modify" size="small">编辑片区</el-button>
-				<el-button class="button-query fl ml10" type="warning" @click="deleteCompany" size="small">删除片区</el-button>
+				<el-button class="button-query fl" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('company_create')">新增片区</el-button>
+				<el-button class="button-query fl" type="primary" @click="modify" size="small" v-if="this.$permissionShow('copmany_edit')">编辑片区</el-button>
+				<el-button class="button-query fl ml10" type="warning" @click="deleteCompany" size="small" v-if="this.$permissionShow('company_delete')">删除片区</el-button>
 				<!-- <el-upload class="button-query fl ml10" :action='templateURL' :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload" :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="primary">批量导入</el-button>
                 </el-upload>

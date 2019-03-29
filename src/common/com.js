@@ -3,7 +3,8 @@ import urlApi from './urlApi';
 import equApi from './equApi';
 import utils from './utils';
 import constants from '../tools/constants';
-import track from './track'
+import track from './track';
+import { permissionShow } from './utils';
 
 const Common = {
     // install方法是必需的
@@ -15,6 +16,7 @@ const Common = {
         Vue.prototype.$utils = utils;
         Vue.prototype.$constants = constants;
         Vue.prototype.$track = track;
+        Vue.prototype.$permissionShow = permissionShow;
         // 使用minxin将功能注入所有组件
         Vue.mixin({
             // 添加到mixin中的任何内容将被注入到所有组件中。

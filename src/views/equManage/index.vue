@@ -13,12 +13,12 @@
 		</el-form>
 		<div>
 			<div class="clear-fix mb10">
-				<el-button class="button-query fr" type="primary" @click="addNew" size="small">新增设备</el-button>
-				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small">删除设备
+				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增设备</el-button>
+				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除设备
 				</el-button>
-                <el-button size="small" class="button-query fr mr10" type="success" @click="uploadAndDownload = !uploadAndDownload">导入设备
+                <el-button size="small" class="button-query fr mr10" type="success" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">导入设备
 					</el-button>
-				<el-button class="button-query fr mr10" type="primary" size="small" @click="uploadAndDownload = !uploadAndDownload">下载模板
+				<el-button class="button-query fr mr10" type="primary" size="small" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">下载模板
 				</el-button>
 			</div>
 			<el-table :data="tBody" border style="width: 100%" size="small" @selection-change="handleSelectionChange">
@@ -34,7 +34,7 @@
 							<el-button type="text" @click="_checkSchoolInfo(scope.row)" class="iconfont icon-chakan">
 							</el-button>
 						</el-tooltip>
-						<el-tooltip effect="dark" content="编辑" placement="bottom">
+						<el-tooltip effect="dark" content="编辑" placement="bottom" v-if="editShow">
 							<el-button type="text" @click="_editSchoolInfo(scope.row)" class="iconfont icon-biji">
 							</el-button>
 						</el-tooltip>
@@ -57,10 +57,10 @@
 		<el-dialog v-if="uploadAndDownload" title="上传与下载" :visible.sync="uploadAndDownload" width="60%">
 			<div class="clearfix mt10 mb10 pl30">
 				<el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 50%">
-					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+					<el-option v-for="item in equList" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
-                <el-button size="small" class="button-query fl mr10" :loading="importingShowLoading" type="primary">下载模板
+                <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
                 </el-button>
                 <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}"
                 :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload"
@@ -80,7 +80,8 @@
 <script>
 	import {
 		dateFormat,
-		checkDateValid
+        checkDateValid,
+        downloadFile
 	} from '@/tools/utils';
 	import dialogAdd from './component/dialogAdd';
 	import download from '@/mixins/downloadWitha';
@@ -100,6 +101,8 @@
 				importingShowLoading: false,
                 uploadAndDownload: false,
                 uploadType: '',
+                equList: [],
+                editShow: this.$permissionShow('equipment_edit'),
 				queryParams: {
 					pageSize: 10,
 					pageNumber: 1,
@@ -271,7 +274,7 @@
 				const response = await this.$http.post(this.$equApi.downloadTemplate, {
 					deviceName: '网关室水压'
 				});
-				// this.download(response.data)
+				downloadFile(response.data)
 			}
 		}
 	}

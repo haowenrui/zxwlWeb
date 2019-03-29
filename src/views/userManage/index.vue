@@ -21,8 +21,8 @@
         </el-form>
         <div>
             <div class="clear-fix mb10">
-                <el-button class="button-query fr" type="primary" @click="addNew" size="small">新增用户</el-button>
-                <el-button class="button-query fr mr10" type="warning" @click="deleteRole" size="small">删除用户</el-button>
+                <el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('user_create')">新增用户</el-button>
+                <el-button class="button-query fr mr10" type="warning" @click="deleteRole" size="small" v-if="this.$permissionShow('user_delete')">删除用户</el-button>
                 <!-- <el-button class="button-query fr" type="primary" size="small" @click="downloadSchoolImportModel">下载模板</el-button>
                 <el-upload class="button-query fr" :action='templateURL' :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload" :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="primary">批量导入</el-button>
@@ -40,7 +40,7 @@
                         <el-tooltip effect="dark" content="查看" placement="bottom">
                             <el-button type="text" @click="_checkUserInfo(scope.row)" class="iconfont icon-chakan"></el-button>
                         </el-tooltip>
-                        <el-tooltip effect="dark" content="编辑" placement="bottom">
+                        <el-tooltip effect="dark" content="编辑" placement="bottom" v-if="editShow">
                             <el-button type="text" @click="_editUserInfo(scope.row)" class="iconfont icon-biji"></el-button>
                         </el-tooltip>
                         
@@ -84,6 +84,7 @@ export default {
             dialogAdd: false,
             dialogCheck: false,
             userInfo: {},
+            editShow: this.$permissionShow('user_edit'),
             queryParams: {
                 name: '',
                 username: '',

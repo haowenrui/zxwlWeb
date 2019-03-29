@@ -9,6 +9,7 @@ export default new Vuex.Store({
         loading: false,
         currentUser: null, //当前用户信息
         menus: [], //菜单栏
+        permissionList: []
     },
     mutations: mutations
 })

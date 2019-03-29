@@ -18,8 +18,8 @@
         </el-form> -->
         <div>
             <div class="clear-fix mb10">
-                <el-button class="button-query fr" type="primary" @click="addNew" size="small">新增角色</el-button>
-                <el-button class="button-query fr mr10" type="warning" @click="deleteRole" size="small">删除角色</el-button>
+                <el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('role_create')">新增角色</el-button>
+                <el-button class="button-query fr mr10" type="warning" @click="deleteRole" size="small" v-if="this.$permissionShow('role_delete')">删除角色</el-button>
             </div>
             <el-table :data="tBody" border style="width: 100%" size="small" @selection-change="handleSelectionChange">
                 <el-table-column type="selection" width="55">
@@ -33,7 +33,7 @@
                         <el-tooltip effect="dark" content="查看" placement="bottom">
                             <el-button type="text" @click="_checkSchoolInfo(scope.row)" class="iconfont icon-chakan"></el-button>
                         </el-tooltip>
-                        <el-tooltip effect="dark" content="编辑" placement="bottom">
+                        <el-tooltip effect="dark" content="编辑" placement="bottom" v-if="editShow">
                             <el-button type="text" @click="_editSchoolInfo(scope.row)" class="iconfont icon-biji"></el-button>
                         </el-tooltip>
                         
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { dateFormat, checkDateValid } from '@/tools/utils';
+import { dateFormat, checkDateValid} from '@/tools/utils';
 import dialogAdd from './component/dialogAdd';
 import dialogCheck from './component/dialogCheck';
 import {  userTypeFilter } from '@/filters/index';
@@ -76,6 +76,7 @@ export default {
             dialogAdd: false,
             dialogCheck: false,
             roleInfo: '',
+            editShow: this.$permissionShow('role_edit'),
             queryParams: {
                 pageSize: 10,
                 pageNumber: 1,
