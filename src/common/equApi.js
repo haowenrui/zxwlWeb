@@ -1,6 +1,8 @@
 import env from './env'
 
-let BASE_URL = 'http://39.98.173.65:9001';
+
+let BASE_URL = 'http://192.168.1.108:9001';
+// let BASE_URL = 'http://39.98.173.65:9001';
 
 
 let equApi = {
@@ -12,7 +14,9 @@ let equApi = {
     addEquipment: '/equipment/save',
     modifyEquipment: '/equipment/update',
     deleteEquipment: '/equipment/delete',
-    downloadTemplate: '/equipment/downloadTemplate',
+    downloadTemplate: '/equipment/downloadTemplatezxwl',
+    findEquipmentItemHistory: '/equipment/findEquipmentItemHistory',
+    findEquipmentModleItem: '/equipment/findEquipmentModleItem',
 
     alarmList: '/alarm/list',
     alarmStatistics: '/statistics/alarmType',
@@ -20,7 +24,10 @@ let equApi = {
     devicesStatistics:'/statistics/devices',
     failureCountStatistics: '/statistics/failureCount',
     failureRateStatistics: '/statistics/failureRate',
-    monthlyAlarmStatistics: '/statistics/monthlyAlarm'
+    monthlyAlarmStatistics: '/statistics/monthlyAlarm',
+
+    sendAlarmMessage: '/alarm/sendAlarmMessage',
+    updateAlarmStatus: '/alarm/updateAlarmStatus'
 }
 
 for (let key in equApi) {

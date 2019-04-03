@@ -119,6 +119,10 @@
 </script>
 
 <style lang="scss" scoped>
+.login-con{
+    background: url(../../assets/images/login.jpeg) no-repeat;
+    background-size: cover;
+}
 
     .bannder_home {
         height: 70px;

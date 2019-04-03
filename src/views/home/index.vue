@@ -35,8 +35,8 @@
 					<div class="item-cont">
 						<div id="monitorCenter">
 							<el-amap vid="amapAlarm" :center="map.center" :mapStyle="mapStyle" :amap-manager="amapManager" :zoom="map.zoom" class="amap-demo">
-                                <el-amap-marker v-for="(marker, index) in markers" :key="index" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index"></el-amap-marker>
-                                <el-amap-marker v-for="(marker, index) in markersFire" :key="index" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index" :icon="pointFireIcon" ></el-amap-marker>
+                                <el-amap-marker v-for="(marker, index) in markers" :key="marker.position[0] + 1" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index"></el-amap-marker>
+                                <el-amap-marker v-for="(marker, index) in markersFire" :key="marker.position[0] + 2" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index" :icon="pointFireIcon" ></el-amap-marker>
                             </el-amap>
 						</div>
                         <div class="alrm-list" v-if="alarmList.length > 0">
@@ -44,7 +44,9 @@
                                 <li v-for="(item,index) in alarmList" :key="index">
                                     <div>
                                         <span>{{item.deviceName}}</span>
-                                        <span class="color-red">{{item.alarmStatus}}</span>
+                                        <span class="color-red">代处理</span>
+                                        <span class="ml10 color-orange" style="cursor: pointer" @click="resolve(item)">处理</span>
+                                        <span class="ml10 color-orange" style="cursor: pointer" @click="transmit(item)">转发</span>
                                     </div>
                                     <div>
                                         {{item.companyName}}
@@ -93,13 +95,27 @@
 				</div>
 			</el-col>
 		</el-row>
+
+
+        <el-dialog v-if="resolveAlarmVisible" title="报警处理" :visible.sync="resolveAlarmVisible" width="60%">
+			<resolveAlarm :show.sync="resolveAlarmVisible" :alrmInfo="alrmInfo" @closePopup="closePopup" @resolveAlarm="resolveAlarm">
+			</resolveAlarm>
+		</el-dialog>
+
+        <el-dialog v-if="transmitAlarmVisible" title="报警转发" :visible.sync="transmitAlarmVisible" width="60%">
+			<transmitAlarm :show.sync="transmitAlarmVisible" :alrmInfo="alrmInfo" @closePopup="closePopup">
+			</transmitAlarm>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
     import ECharts from 'echarts';
-    import { jsGetCookie } from '@/tools/utils';
+    import { jsGetCookie, dateFormat } from '@/tools/utils';
     import { AMapManager } from 'vue-amap';
+
+    import resolveAlarm from './components/resolveAlarm.vue';
+    import transmitAlarm from './components/transmitAlarm.vue';
 
     let pointFireIcon = new AMap.Icon({
         size: new AMap.Size(40, 40),    // 图标尺寸
@@ -108,11 +124,16 @@
     });
 	export default {
 		components: {
+            resolveAlarm,
+            transmitAlarm
 		},
 		mixins: [],
 		props: [],
 		data() {
 			return {
+                resolveAlarmVisible: false,
+                transmitAlarmVisible: false,
+                alrmInfo: {},
 				map: {
 					center: [116.404,39.915],
 					zoom: 15
@@ -183,21 +204,26 @@
             },
             async getAlarmList(){
                 let self = this;
-                const res = await this.$http.post(this.$equApi.alarmList);
-                if(!res.status){
-                    this.alarmPositionList = 
+                const res = await this.$http.post(this.$equApi.alarmList,{
+                    pageNumber: 1,
+                    pageSize: 3,
+                    alarmStatus: 'unprocessed'
+                });
+                if(res.result == 'SUCCESS'){
+                    this.alarmPositionList = [];
                     this.alarmList = [];
                     this.alarmPositionList = res.data;
                     this.alarmList = res.data.content;
 
                     this.alarmPositionList.content.forEach(item => {
-                        if(item.lon && item.lat){
+                        if(item.lng && item.lat){
                             self.markersFire.push({
-                                position: [item.lon,item.lat],
+                                id: item.alarmId,
+                                position: [item.lng,item.lat],
                                 visible: true,
                                 events: {
                                     click() {
-                                        alert(item.name + '-' + item.address)
+                                        alert(item.deviceName + '于' +  dateFormat('yyyy-MM-dd hh:mm:ss',new Date(item.alarmDate)) + '发生报警\n地址：' + item.companyName + '-' + item.companyAddress)
                                     }
                                 }
                             })
@@ -216,14 +242,13 @@
                     legendData.push(item.name);
                 });
 				let seriesName = '报警类型统计';
-				let seriesData = res.data;
+                let seriesData = res.data;
 				this._renderPieCharts(ele, legendData, seriesName, seriesData)
 			},
 			_renderPieCharts(ele, legendData, seriesName, seriesData) {
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
-					color: _self.colorPalette,
 					title: {
 						show: false,
 						x: 'center'
@@ -307,7 +332,6 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
-					color: _self.colorPalette,
 					tooltip: {
 						trigger: 'item',
 						position: ['20%', '0'],
@@ -395,7 +419,6 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
-					color: _self.colorPalette,
 					grid: {
 						top: '10px',
 						left: '10px',
@@ -469,7 +492,6 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
-					color: _self.colorPalette,
 					grid: {
 						top: '10px',
 						left: '10px',
@@ -535,7 +557,6 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
-					color: _self.colorPalette,
 					grid: {
 						top: '10px',
 						left: '10px',
@@ -633,6 +654,36 @@
                 //     this.initWebSocket();
                 // }
             },
+
+            resolve(info){
+                this.alrmInfo = info;
+                this.resolveAlarmVisible = true;
+            },
+
+            transmit(info){
+                this.alrmInfo = info;
+                this.transmitAlarmVisible = true;
+            },
+
+            closePopup(){
+                this.resolveAlarmVisible = false;
+                this.transmitAlarmVisible = false;
+            },
+
+            resolveAlarm(){
+                let _self = this;
+                const pointIndex = this.markersFire.findIndex(item => {
+                    return item.id == this.alrmInfo.alarmId;
+                });
+
+                const alarmIndex = this.alarmList.findIndex(item => {
+                    return item.id == this.alrmInfo.alarmId;
+                })
+
+                this.alarmList.splice(alarmIndex,1)
+                this.markersFire.splice(pointIndex,1)
+                this.resolveAlarmVisible = false;
+            }
 		}
 	}
 

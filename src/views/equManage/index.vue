@@ -53,6 +53,11 @@
 			</dialogAdd>
 		</el-dialog>
 
+        <el-dialog v-if="dialogView" title="查看" :visible.sync="dialogView" width="60%">
+			<dialogView :show.sync="dialogView" :equipmentInfo="equipmentInfo">
+			</dialogView>
+		</el-dialog>
+
 
 		<el-dialog v-if="uploadAndDownload" title="上传与下载" :visible.sync="uploadAndDownload" width="60%">
 			<div class="clearfix mt10 mb10 pl30">
@@ -62,7 +67,7 @@
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
                 </el-button>
-                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token,'Content-Type': 'application/json'}" :data="{deviceName: uploadType}"
+                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}" :data="{deviceName: uploadType}"
                 :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload"
                 :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入设备
@@ -83,7 +88,8 @@
         checkDateValid,
         downloadFile
 	} from '@/tools/utils';
-	import dialogAdd from './component/dialogAdd';
+    import dialogAdd from './component/dialogAdd';
+    import dialogView from './component/dialogView';
 	import download from '@/mixins/downloadWitha';
 	import {
 		jsGetCookie
@@ -91,12 +97,14 @@
 
 	export default {
 		components: {
-			dialogAdd
+            dialogAdd,
+            dialogView
 		},
 		props: [],
 		data() {
 			return {
-				dialogAdd: false,
+                dialogAdd: false,
+                dialogView: false,
 				queryingShowLoading: false,
 				importingShowLoading: false,
                 uploadAndDownload: false,
@@ -213,7 +221,8 @@
 				}
 			},
 			_checkSchoolInfo(info) {
-
+                this.equipmentInfo = info;
+				this.dialogView = true;
 			},
 			beforeUpload(file) {
 				this.token = jsGetCookie('_TOKEN_');
@@ -271,10 +280,10 @@
 				this.onQuery();
 			},
 			async downloadEquTemplate() {
-				const response = await this.$http.post(this.$equApi.downloadTemplate, {
-					deviceName: '网关室水压'
-				});
-				downloadFile(response.data)
+				// const response = await this.$http.get(this.$equApi.downloadTemplate, {
+				// 	deviceName: this.uploadType
+				// });
+				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceName=' + this.uploadType)
 			}
 		}
 	}

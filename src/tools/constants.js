@@ -61,11 +61,11 @@ let constants = {
     equType: [
         {
             name: 'NB烟感',
-            value: 'nbSmoke '
+            value: 'nbSmoke'
         },
         {
             name: 'NB气感',
-            value: 'nbGasSense '
+            value: 'nbGasSense'
         },
         {
             name: 'NB温感',
