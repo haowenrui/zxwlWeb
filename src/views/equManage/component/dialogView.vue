@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { dateFormat } from '@/tools/utils';
 	export default {
 		components: {},
 		mixins: [],
@@ -121,7 +122,7 @@
 				let seriesData = [];
 				const res = await this.$http.post(this.$equApi.findEquipmentItemHistory, this.queryParams)
 				res.data.forEach(item => {
-					xData.push(item.time);
+					xData.push(dateFormat('yyyy-MM-dd hh-mm-ss', new Date(item.time)));
 					seriesData.push(item.value)
 				})
 				this._renderLineCharts(ele, xData, seriesData);
