@@ -19,9 +19,9 @@
 					<el-form-item label="片区名称:">
 						<span>{{companyInfo.name}}</span>
 					</el-form-item>
-					<el-form-item label="所属区域:">
+					<!-- <el-form-item label="所属区域:">
 						<span>{{companyInfo.regionCode}}</span>
-					</el-form-item>
+					</el-form-item> -->
 					<el-form-item label="地址:">
 						<span>{{companyInfo.address}}</span>
 					</el-form-item>
@@ -37,7 +37,7 @@
 					<el-form-item label="负责人电话:">
 						<span>{{companyInfo.directorTel}}</span>
 					</el-form-item>
-					<el-form-item label="创建时间:">
+					<!-- <el-form-item label="创建时间:">
 						<span>{{companyInfo.dateCreated | dateFormatFilter}}</span>
 					</el-form-item>
 					<el-form-item label="修改者:">
@@ -45,7 +45,7 @@
 					</el-form-item>
 					<el-form-item label="修改时间:">
 						<span>{{companyInfo.lastUpdated | dateFormatFilter }}</span>
-					</el-form-item>
+					</el-form-item> -->
 				</el-form>
 			</div>
 		</div>

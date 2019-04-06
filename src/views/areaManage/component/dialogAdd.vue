@@ -4,9 +4,9 @@
             <el-form-item label="片区名称:">
                 <el-input v-model.trim="form.name" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="所属区域:">
+            <!-- <el-form-item label="所属区域:">
                 <el-input v-model.trim="form.regionCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="地址:">
                 <el-input v-model.trim="form.address" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>

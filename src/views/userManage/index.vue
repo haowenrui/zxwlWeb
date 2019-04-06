@@ -37,9 +37,9 @@
                 <el-table-column align="center" label="操作" width="">
                     <template slot-scope="scope">
 
-                        <el-tooltip effect="dark" content="查看" placement="bottom">
+                        <!-- <el-tooltip effect="dark" content="查看" placement="bottom">
                             <el-button type="text" @click="_checkUserInfo(scope.row)" class="iconfont icon-chakan"></el-button>
-                        </el-tooltip>
+                        </el-tooltip> -->
                         <el-tooltip effect="dark" content="编辑" placement="bottom" v-if="editShow">
                             <el-button type="text" @click="_editUserInfo(scope.row)" class="iconfont icon-biji"></el-button>
                         </el-tooltip>

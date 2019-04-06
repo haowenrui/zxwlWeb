@@ -97,12 +97,12 @@
 		</el-row>
 
 
-        <el-dialog v-if="resolveAlarmVisible" title="报警处理" :visible.sync="resolveAlarmVisible" width="60%">
+        <el-dialog v-if="resolveAlarmVisible" title="报警处理" :visible.sync="resolveAlarmVisible" width="30%">
 			<resolveAlarm :show.sync="resolveAlarmVisible" :alrmInfo="alrmInfo" @closePopup="closePopup" @resolveAlarm="resolveAlarm">
 			</resolveAlarm>
 		</el-dialog>
 
-        <el-dialog v-if="transmitAlarmVisible" title="报警转发" :visible.sync="transmitAlarmVisible" width="60%">
+        <el-dialog v-if="transmitAlarmVisible" title="报警转发" :visible.sync="transmitAlarmVisible" width="30%">
 			<transmitAlarm :show.sync="transmitAlarmVisible" :alrmInfo="alrmInfo" @closePopup="closePopup">
 			</transmitAlarm>
 		</el-dialog>
@@ -217,6 +217,7 @@
 
                     this.alarmPositionList.content.forEach(item => {
                         if(item.lng && item.lat){
+							
                             self.markersFire.push({
                                 id: item.alarmId,
                                 position: [item.lng,item.lat],
@@ -556,6 +557,21 @@
 			_renderLineCharts(ele, xData, seriesData) {
 				let _self = this;
 				let charts = ECharts.init(ele);
+
+				// let option = {
+				// 	xAxis: {
+				// 		type: 'category',
+				// 		data: xData
+				// 	},
+				// 	yAxis: {
+				// 		type: 'value'
+				// 	},
+				// 	series: [{
+				// 		data: seriesData,
+				// 		type: 'line'
+				// 	}]
+				// };
+
 				let option = {
 					grid: {
 						top: '10px',
@@ -596,7 +612,10 @@
 							show: false
 						}
 					},
-					series: seriesData
+					series: [{
+						data: seriesData,
+						type: 'line'
+					}]
 				};
 				charts.setOption(option);
             },
