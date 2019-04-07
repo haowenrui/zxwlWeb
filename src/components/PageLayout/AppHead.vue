@@ -223,7 +223,7 @@
             async modifyPwd(){
                 this.modifyPwdForm.userId = jsGetCookie('_CURRENT_USER_ID_');
                 const res = await this.$http.post(this.$urlApi.modifyPwd,this.modifyPwdForm);
-                if(res.status == 'SUCCESS'){
+                if(res.result == 'SUCCESS'){
                     this.$message.success('修改成功');
                     this.modifyPwdVisible = false;
                     this.$refs.ruleForm2.resetFields();

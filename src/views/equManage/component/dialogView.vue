@@ -72,18 +72,20 @@
 
 <script>
 import { dateFormat } from '@/tools/utils';
+import ECharts from 'echarts';
 	export default {
 		components: {},
 		mixins: [],
 		props: ['equipmentInfo'],
 		data() {
 			return {
+				queryingShowLoading: false,
                 form: {},
                 typeList: [],
                 queryingShowLoading: false,
 				queryParams: {
 					itemCode: '',
-					equipmentId: this.equipmentInfo.id,
+					equipmentId: this.equipmentInfo.deviceId,
 					startTime: '',
 					endTime: ''
 				}
@@ -124,7 +126,7 @@ import { dateFormat } from '@/tools/utils';
 				let seriesData = [];
 				const res = await this.$http.post(this.$equApi.findEquipmentItemHistory, this.queryParams)
 				res.data.forEach(item => {
-					xData.push(dateFormat('yyyy-MM-dd hh-mm-ss', new Date(item.time)));
+					xData.push(dateFormat('yyyy-MM-dd hh:mm:ss', new Date(item.time)));
 					seriesData.push(item.value)
 				})
                 this._renderLineCharts(ele, xData, seriesData);
@@ -133,6 +135,7 @@ import { dateFormat } from '@/tools/utils';
                 }
 			},
 			_renderLineCharts(ele, xData, seriesData) {
+				
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
@@ -158,7 +161,9 @@ import { dateFormat } from '@/tools/utils';
 							color: '#fff',
 							fontSize: 10
 						},
-						data: xData
+						data: xData.map(function (str) {
+							return str.replace(' ', '\n')
+						})
 					},
 					yAxis: {
 						type: 'value',
@@ -175,7 +180,10 @@ import { dateFormat } from '@/tools/utils';
 							show: false
 						}
 					},
-					series: seriesData
+					series: [{
+						data: seriesData,
+						type: 'line'
+					}]
 				};
 				charts.setOption(option);
 			},
