@@ -80,6 +80,7 @@ import { dateFormat } from '@/tools/utils';
 			return {
                 form: {},
                 typeList: [],
+                queryingShowLoading: false,
 				queryParams: {
 					itemCode: '',
 					equipmentId: this.equipmentInfo.id,
@@ -101,6 +102,7 @@ import { dateFormat } from '@/tools/utils';
 				this.$emit("update:show", false);
 			},
 			queryClick() {
+                this.queryingShowLoading = true;
 				this.equHistoryCharts();
 			},
 			async queryEquipmentInfo() {
@@ -125,7 +127,10 @@ import { dateFormat } from '@/tools/utils';
 					xData.push(dateFormat('yyyy-MM-dd hh-mm-ss', new Date(item.time)));
 					seriesData.push(item.value)
 				})
-				this._renderLineCharts(ele, xData, seriesData);
+                this._renderLineCharts(ele, xData, seriesData);
+                if(res){
+                    this.queryingShowLoading =false;
+                }
 			},
 			_renderLineCharts(ele, xData, seriesData) {
 				let _self = this;
