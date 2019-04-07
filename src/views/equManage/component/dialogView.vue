@@ -154,11 +154,11 @@ import ECharts from 'echarts';
 						type: 'category',
 						axisLine: {
 							lineStyle: {
-								color: '#666'
+								color: '#ddd'
 							}
 						},
 						axisLabel: {
-							color: '#fff',
+							color: '#333',
 							fontSize: 10
 						},
 						data: xData.map(function (str) {
@@ -169,11 +169,12 @@ import ECharts from 'echarts';
 						type: 'value',
 						axisLine: {
 							lineStyle: {
-								color: '#666'
+								color: '#ddd'
 							}
 						},
 						axisLabel: {
-							color: '#fff',
+                            show: true,
+							color: '#333',
 							fontSize: 10
 						},
 						splitLine: {
