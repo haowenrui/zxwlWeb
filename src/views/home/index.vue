@@ -737,7 +737,7 @@
             padding: 10px;
             background: rgba(0,0,0,.6);
             margin-bottom: 20px;
-            border: 1px solid #333;
+            border: 1px solid #bba225;
             width: 100%;
             max-height: 100px;
         }

@@ -93,8 +93,15 @@
 			},
 
 			async getCompany() {
-				const response = await this.$http.get(this.$urlApi.getCompany);
-				this.companyList = response.data;
+                const response = await this.$http.get(this.$urlApi.getCompany);
+                if(response.result == 'SUCCESS'){
+                    this.companyList = response.data;
+                    if(response.data.length > 0){
+                        this.checkItem.push(response.data[0].value);
+                        this.selectAreaId = response.data[0].value;
+                        this.getCompanyInfo(this.selectAreaId)
+                    }
+                }
 			},
 
 			addNew() {
@@ -132,6 +139,7 @@
                 this.getCompany();
             },
             handleClick(data,checked, node) {
+                this.$refs.companyTree.setCheckedNodes([]);
                 this.selectCount++;
                 if(this.selectCount%2==0){
                     if(checked){
