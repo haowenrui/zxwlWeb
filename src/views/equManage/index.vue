@@ -108,7 +108,7 @@
 				queryingShowLoading: false,
 				importingShowLoading: false,
                 uploadAndDownload: false,
-                uploadType: '',
+                uploadType: 'nbSmoke',
                 equList: [],
                 editShow: this.$permissionShow('equipment_edit'),
 				queryParams: {

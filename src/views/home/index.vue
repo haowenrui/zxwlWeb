@@ -1,7 +1,7 @@
 <template>
 	<div class="home-bg">
-		<el-row :gutter="16">
-			<el-col :span="6">
+		<el-row :gutter="16" style="height: 100%;">
+			<el-col :span="6" style="height: 100%;">
 				<div class="item-block">
 					<div class="item-title">
 						报警类型统计
@@ -27,16 +27,16 @@
 					</div>
 				</div>
 			</el-col>
-			<el-col :span="12">
-				<div class="item-block">
+			<el-col :span="12" style="height: 100%;">
+				<div class="item-block"  style="height: calc(100% - 28px)">
 					<div class="item-title">
 						监控中心
 					</div>
 					<div class="item-cont">
 						<div id="monitorCenter">
 							<el-amap vid="amapAlarm" :center="map.center" :mapStyle="mapStyle" :amap-manager="amapManager" :zoom="map.zoom" class="amap-demo">
-                                <el-amap-marker v-for="(marker, index) in markers" :key="marker.position[0] + 1" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index"></el-amap-marker>
-                                <el-amap-marker v-for="(marker, index) in markersFire" :key="marker.position[0] + 2" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index" :icon="pointFireIcon" ></el-amap-marker>
+                                <el-amap-marker v-for="(marker, index) in markers" :key="index + 'a'" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index"></el-amap-marker>
+                                <el-amap-marker v-for="(marker, index) in markersFire" :key="index + 'b'" :position="marker.position" :events="marker.events" :visible="marker.visible" :vid="index" :icon="pointFireIcon" ></el-amap-marker>
                             </el-amap>
 						</div>
                         <div class="alrm-list" v-if="alarmList.length > 0">
@@ -59,16 +59,16 @@
                         </div>
 					</div>
 				</div>
-				<div class="item-block">
+				<!-- <div class="item-block">
 					<div class="item-title">
 						月度报警数量统计
 					</div>
 					<div class="item-cont">
 						<div id="monthAlarm"></div>
 					</div>
-				</div>
+				</div> -->
 			</el-col>
-			<el-col :span="6">
+			<el-col :span="6" style="height: 100%;">
 				<div class="item-block">
 					<div class="item-title">
 						片区新增设备
@@ -79,10 +79,10 @@
 				</div>
 				<div class="item-block">
 					<div class="item-title">
-						片区新增用户
+						月度报警数量统计
 					</div>
 					<div class="item-cont">
-						<div id="newUser"></div>
+						<div id="monthAlarm"></div>
 					</div>
 				</div>
 				<div class="item-block">
@@ -172,7 +172,7 @@
 			this.equTypeCharts();
 			this.monthAlarmCharts();
 			this.newEquCharts();
-			this.newUserCharts();
+			// this.newUserCharts();
             this.alarmCenterCharts();
 
             this.getCompanyPositionList();
@@ -712,7 +712,7 @@
 	.home-bg {
 		padding: 0 10px 10px 10px;
 		min-width: 1400px;
-		height: 100%;
+		height: 100vh;
 		background: #081b3e;
 	}
 
@@ -722,7 +722,8 @@
 		color: #fff;
 		border: 1px solid #034c6a;
 		box-shadow: 0px 0px 10px #034c6a inset;
-		position: relative;
+        position: relative;
+        height: calc(33% - 20px)
 	}
 
     .alrm-list{
@@ -768,19 +769,19 @@
 	}
 
 	#monitorCenter {
-		height: 492px;
+		height: 93vh;
 	}
 
 	#alarmType,
 	#equType,
-	#monthAlarm,
 	#newEqu,
 	#alarmCenter {
 		width: 100%;
 		height: 200px;
 	}
 
-	#equError,
+    #equError,
+    #monthAlarm,
 	#newUser {
 		width: 100%;
 		height: 250px;
