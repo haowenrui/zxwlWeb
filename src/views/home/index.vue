@@ -114,14 +114,11 @@
     import { jsGetCookie, dateFormat } from '@/tools/utils';
     import { AMapManager } from 'vue-amap';
 
+    import VueAMap from 'vue-amap';
+
     import resolveAlarm from './components/resolveAlarm.vue';
     import transmitAlarm from './components/transmitAlarm.vue';
 
-    let pointFireIcon = new AMap.Icon({
-        size: new AMap.Size(40, 40),    // 图标尺寸
-        image: require('../../assets/images/fire.png'),  // Icon的图像
-        imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
-    });
 	export default {
 		components: {
             resolveAlarm,
@@ -140,7 +137,7 @@
                 },
                 amapManager: null,
                 mapStyle: 'amap://styles/2daab02a809fa46d3675bb16d22b771c',
-                pointFireIcon: pointFireIcon,
+                pointFireIcon: null,
 				markers: [],
                 markersFire: [],
                 websock: null,
@@ -153,19 +150,33 @@
 
                 BMapGet: null,
                 mapGet: null,
-                myIcongGet: null
+                myIcongGet: null,
 			}
 		},
 		watch: {},
 		computed: {},
 		created() {
             this.initWebSocket();
+            VueAMap.initAMapApiLoader({
+                key: 'e4ef0223eccf4a616044accca024960f',
+                mapStyle: 'amap://styles/2daab02a809fa46d3675bb16d22b771c',
+                plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+                // 默认高德 sdk 版本为 1.4.4
+                v: '1.4.4'
+            });
         },
         destroyed(){
             this.connectFlag = false;
             this.websocketclose();
+            VueAMap.destroy();
         },
 		mounted() {
+            this.pointFireIcon = new AMap.Icon({
+                size: new AMap.Size(40, 40),    // 图标尺寸
+                image: require('../../assets/images/fire.png'),  // Icon的图像
+                imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
+            });
+
             this.areaCode = jsGetCookie('_CURRENT_COMPANY_AREA_');
 			this.alarmTypeChart();
 			this.equErrorCharts();
