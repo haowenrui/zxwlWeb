@@ -157,26 +157,12 @@
 		computed: {},
 		created() {
             this.initWebSocket();
-            VueAMap.initAMapApiLoader({
-                key: 'e4ef0223eccf4a616044accca024960f',
-                mapStyle: 'amap://styles/2daab02a809fa46d3675bb16d22b771c',
-                plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
-                // 默认高德 sdk 版本为 1.4.4
-                v: '1.4.4'
-            });
         },
         destroyed(){
             this.connectFlag = false;
             this.websocketclose();
-            VueAMap.destroy();
         },
 		mounted() {
-            this.pointFireIcon = new AMap.Icon({
-                size: new AMap.Size(40, 40),    // 图标尺寸
-                image: require('../../assets/images/fire.png'),  // Icon的图像
-                imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
-            });
-
             this.areaCode = jsGetCookie('_CURRENT_COMPANY_AREA_');
 			this.alarmTypeChart();
 			this.equErrorCharts();
@@ -188,6 +174,15 @@
 
             this.getCompanyPositionList();
             this.getAlarmList();
+
+            let _self = this;
+            setTimeout(function(){
+                _self.pointFireIcon = new AMap.Icon({
+                    size: new AMap.Size(40, 40),    // 图标尺寸
+                    image: require('../../assets/images/fire.png'),  // Icon的图像
+                    imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
+                });
+            },1000);
             
 		},
 		methods: {
