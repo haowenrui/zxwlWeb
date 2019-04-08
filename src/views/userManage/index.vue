@@ -133,6 +133,14 @@ export default {
                     prop: 'companyName',
                     label: '公司名称',
                     width: ''
+                },
+                {
+                    prop: 'isUsed',
+                    label: '状态',
+                    width: '',
+                    formatter: (row, column,cellValue) => {
+                        return cellValue?"启用":"停用"
+                    }
                 }
             ],
             tBody:[]
