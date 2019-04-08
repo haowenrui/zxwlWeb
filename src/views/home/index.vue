@@ -772,19 +772,20 @@
 		height: 93vh;
 	}
 
-	#alarmType,
-	#equType,
-	#newEqu,
-	#alarmCenter {
-		width: 100%;
-		height: 200px;
-	}
-
     #equError,
+	#equType{
+		width: 100%;
+		height: calc(33vh - 20px);
+    }
+    
+
+    #newEqu,
+	#alarmCenter,
+	#alarmType,
     #monthAlarm,
 	#newUser {
 		width: 100%;
-		height: 250px;
+		height: calc(33vh - 40px);
 	}
 
 </style>
