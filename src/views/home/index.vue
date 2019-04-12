@@ -190,7 +190,6 @@
                     imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
                 });
             },1000);
-            
 		},
 		methods: {
             async getCompanyPositionList(){
@@ -642,28 +641,31 @@
             },
             websocketonmessage(e){ //数据接收
                 console.log('数据接收',e);
-                if(e.data.alarmId){
+                if(e.data == '111 received at server'){
+                    return
+                }else{
                     const redata = JSON.parse(e.data)
-                    this.alarmList.forEach(item => {
-                        if(item.alarmId == redata.alarmId){
-                            return;
-                        }
+                    let hasAlarm = this.alarmList.findIndex(item => {
+                        return item.alarmId == redata.alarmId
                     })
-                    if(this.alarmList.length > 1){
-                        this.alarmList.splice(2);
-                    }
-                    this.alarmList.push(redata)
 
-                    this.markersFire.push({
-                        id: redata.alarmId,
-                        position: [redata.lng,redata.lat],
-                        visible: true,
-                        events: {
-                            click() {
-                                alert(redata.name + '-' + redata.address)
-                            }
+                    if(hasAlarm == -1){
+                        if(this.alarmList.length > 1){
+                            this.alarmList.splice(2);
                         }
-                    })
+                        this.alarmList.push(redata)
+
+                        this.markersFire.push({
+                            id: redata.alarmId,
+                            position: [parseFloat(redata.lng),parseFloat(redata.lat)],
+                            visible: true,
+                            events: {
+                                click() {
+                                    alert(redata.deviceName + '-' + redata.insLocation)
+                                }
+                            }
+                        })
+                    }
                 }
 
             },
