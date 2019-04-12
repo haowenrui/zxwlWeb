@@ -48,3 +48,15 @@ let userTypeFilter = (type) => {
     return result;
 };
 export { userTypeFilter }
+
+
+let deviceStatus = type => {
+    let status = '';
+    if(type == 'online'){
+        status = '在线';
+    }else{
+        status = '离线'
+    }
+    return status;
+}
+export { deviceStatus }

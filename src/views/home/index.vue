@@ -133,7 +133,7 @@
                 alrmInfo: {},
 				map: {
 					center: [116.404,39.915],
-					zoom: 15
+					zoom: 13
                 },
                 amapManager: null,
                 mapStyle: 'amap://styles/2daab02a809fa46d3675bb16d22b771c',
@@ -151,6 +151,13 @@
                 BMapGet: null,
                 mapGet: null,
                 myIcongGet: null,
+
+                colorPalette: [
+                    '#2ec7c9','#b6a2de','#5ab1ef','#ffb980','#d87a80',
+                    '#8d98b3','#e5cf0d','#97b552','#95706d','#dc69aa',
+                    '#07a2a4','#9a7fd1','#588dd5','#f5994e','#c05050',
+                    '#59678c','#c9ab00','#7eb00a','#6f5553','#c14089'
+                ]
 			}
 		},
 		watch: {},
@@ -256,6 +263,7 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
+                    color: _self.colorPalette,
 					title: {
 						show: false,
 						x: 'center'
@@ -339,6 +347,7 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
+                    color: _self.colorPalette,
 					tooltip: {
 						trigger: 'item',
 						position: ['20%', '0'],
@@ -426,6 +435,7 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
+                    color: _self.colorPalette,
 					grid: {
 						top: '10px',
 						left: '10px',
@@ -499,6 +509,7 @@
 				let _self = this;
 				let charts = ECharts.init(ele);
 				let option = {
+                    color: _self.colorPalette,
 					grid: {
 						top: '10px',
 						left: '10px',
@@ -563,22 +574,8 @@
 			_renderLineCharts(ele, xData, seriesData) {
 				let _self = this;
 				let charts = ECharts.init(ele);
-
-				// let option = {
-				// 	xAxis: {
-				// 		type: 'category',
-				// 		data: xData
-				// 	},
-				// 	yAxis: {
-				// 		type: 'value'
-				// 	},
-				// 	series: [{
-				// 		data: seriesData,
-				// 		type: 'line'
-				// 	}]
-				// };
-
 				let option = {
+                    color: _self.colorPalette,
 					grid: {
 						top: '10px',
 						left: '10px',
@@ -657,8 +654,9 @@
                     }
                     this.alarmList.push(redata)
 
-                    self.markersFire.push({
-                        position: [redata.lon,redata.lat],
+                    this.markersFire.push({
+                        id: redata.alarmId,
+                        position: [redata.lng,redata.lat],
                         visible: true,
                         events: {
                             click() {
@@ -674,10 +672,10 @@
             },
             websocketclose(e){  //关闭
                 console.log('断开连接',e);
-                // if(this.connectFlag){
-                //     console.log('重新连接');
-                //     this.initWebSocket();
-                // }
+                if(this.connectFlag){
+                    console.log('重新连接');
+                    this.initWebSocket();
+                }
             },
 
             resolve(info){

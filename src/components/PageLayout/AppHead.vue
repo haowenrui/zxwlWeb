@@ -71,9 +71,9 @@
                     </ul>
 				</div>
 			</el-popover>
-			<el-button type="text" class="button-user fr" v-if="companyName"
+			<el-button type="text" class="button-user fr" v-if="companyUserName"
 			 v-popover:popoverlogout @click=" visible = true">
-				{{companyName}}<i class="el-icon-more el-icon--right"></i>
+				{{companyUserName}}<i class="el-icon-more el-icon--right"></i>
             </el-button>
 
             <div class="div-box fr" v-if="companyList && companyList.length > 1">
@@ -134,6 +134,7 @@
                 modifyPwdVisible: false,
                 companyList: [],
                 companyId: '',
+                companyUserName: '',
                 companyName: '',
                 modifyPwdForm: {
                     oldPassword: '',
@@ -163,6 +164,7 @@
 		mounted() {
             this.companyId = jsGetCookie('_CURRENT_COMPANY_ID_');
             this.companyName = decodeURI(jsGetCookie('_CURRENT_COMPANY_NAME_'));
+            this.companyUserName = decodeURI(jsGetCookie('_CURRENT_USER_NAME_'));
             this.queryCompanyList();
             this.queryCurrentPermission();
 		},

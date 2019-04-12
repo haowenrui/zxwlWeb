@@ -86,15 +86,13 @@
 	import {
 		dateFormat,
         checkDateValid,
-        downloadFile
+        downloadFile,
+        jsGetCookie
 	} from '@/tools/utils';
     import dialogAdd from './component/dialogAdd';
     import dialogView from './component/dialogView';
-	import download from '@/mixins/downloadWitha';
-	import {
-		jsGetCookie
-	} from '@/tools/utils';
-
+    import download from '@/mixins/downloadWitha';
+    import { deviceStatus } from '@/filters/index';
 	export default {
 		components: {
             dialogAdd,
@@ -134,6 +132,14 @@
 						prop: 'deviceName',
 						label: '设备名称',
 						width: ''
+					},
+                    {
+						prop: 'deviceOnline',
+						label: '状态',
+						width: '',
+                        formatter: (row, column, cellValue) => {
+                            return deviceStatus(cellValue);
+						}
 					},
 					{
 						prop: 'proComName',
