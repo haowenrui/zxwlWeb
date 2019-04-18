@@ -33,6 +33,7 @@ let urlApi = {
     editLoginAuth: '/user/editLoginAuthority',
     addUser: '/user/add',
     editUser: '/user/edit',
+    checkToken: '/system/checkToken'
 }
 
 for (let key in urlApi) {

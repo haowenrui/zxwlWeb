@@ -95,7 +95,9 @@
 				</div>
 			</el-col>
 		</el-row>
-
+        <div class="alarm-sound">
+            <audio id="sound" autoplay="false" src="../../../static/fire.mp3"></audio>
+        </div>
 
         <el-dialog v-if="resolveAlarmVisible" title="报警处理" :visible.sync="resolveAlarmVisible" width="30%">
 			<resolveAlarm :show.sync="resolveAlarmVisible" :alrmInfo="alrmInfo" @closePopup="closePopup" @resolveAlarm="resolveAlarm">
@@ -650,6 +652,7 @@
                     })
 
                     if(hasAlarm == -1){
+                        document.getElementById("sound").play();
                         if(this.alarmList.length > 1){
                             this.alarmList.splice(2);
                         }
@@ -673,10 +676,25 @@
                 this.websock.send(Data);
             },
             websocketclose(e){  //关闭
+                let _self = this; 
                 console.log('断开连接',e);
+                let tokenStatus
                 if(this.connectFlag){
-                    console.log('重新连接');
-                    this.initWebSocket();
+                    this.checkToken(() => {
+                        console.log('重新连接');
+                        _self.initWebSocket();
+                    })
+                }
+            },
+
+            async checkToken(callBack){
+                const response = await this.$http.post(this.$urlApi.checkToken);
+                if(response.result === 'SUCCESS'){
+                    callBack && callBack();
+                }else{
+                    this.$router.push({
+                        path: '/login'
+                    })
                 }
             },
 
@@ -793,5 +811,11 @@
 		width: 100%;
 		height: calc(33vh - 40px);
 	}
+
+    .alarm-sound{
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+    }
 
 </style>

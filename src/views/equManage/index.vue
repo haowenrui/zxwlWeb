@@ -11,7 +11,7 @@
 			</el-form-item>
 
 		</el-form>
-		<div>
+		<div class="use-table">
 			<div class="clear-fix mb10">
 				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增设备</el-button>
 				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除设备
@@ -42,8 +42,8 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination @current-change="handleCurrentChange" :current-page=currentPage :page-size=pageSize
-				layout="total, prev, pager, next, jumper" :total=total background class="page" v-show="total > 0"
+			<el-pagination @current-change="handleCurrentChange" :current-page="queryParams.pageNumber" :page-size=pageSize
+				layout="total, prev, pager, next, jumper" :total="total" class="page" v-show="total > 0"
 				:disabled="queryingShowLoading">
 			</el-pagination>
 		</div>
@@ -192,7 +192,7 @@
 		},
 		methods: {
 			onQuery() {
-				this.queryParams.pageNo = 1;
+				this.queryParams.pageNumber = 1;
 				this.queryEquipmentList();
 			},
 
@@ -261,7 +261,7 @@
 				});
 			},
 			handleCurrentChange(page) {
-				this.queryParams.pageNo = page;
+				this.queryParams.pageNumber = page;
 				this.queryEquipmentList();
 			},
 			async queryEquipmentList() {
@@ -272,8 +272,8 @@
 				// }
 				const response = await this.$http.get(this.$equApi.equipmentList, this.queryParams);
 				this.tBody = response.data.equipmentList;
-				this.total = response.data.total;
-				this.queryParams.pageNo = response.data.pageNo;
+				this.total = parseInt(response.data.equipmentCount);
+				// this.queryParams.pageNumber = response.data.pageNumber;
 			},
 			_editSchoolInfo(info) {
 				this.equipmentInfo = info;
@@ -299,5 +299,10 @@
 	.input-info {
 		width: 200px;
 	}
+
+    .use-table >>> .el-checkbox__inner,
+    .use-table /deep/ .el-checkbox__inner{
+        border: 1px solid #666 !important;
+    }
 
 </style>

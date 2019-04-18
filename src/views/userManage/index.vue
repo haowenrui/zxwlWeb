@@ -164,7 +164,7 @@ export default {
             this.queryUserList();
         },
         refreshData(){
-            this.queryUserList();
+            this.onQuery();
         },
         addNew(){
             this.userInfo = {};

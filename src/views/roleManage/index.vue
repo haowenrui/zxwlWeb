@@ -143,12 +143,12 @@ export default {
     },
     methods:{
         onQuery(){
-            this.queryParams.pageNo = 1;
+            this.queryParams.pageNumber = 1;
             this.queryRoleList();
         },
         refreshData(){
             this.dialogAdd = false;
-            this.queryRoleList();
+            this.onQuery();
         },
         addNew(){
             this.roleInfo = {};

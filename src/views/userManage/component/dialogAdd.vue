@@ -113,7 +113,7 @@
 				const response = await this.$http.post(this.$urlApi.addUser, this.form);
 				if (!response.status) {
 					this.$emit("update:show", false);
-					this.$emit("refresh-data");
+					this.$emit("refreshData");
 					this.$message({
 						showClose: true,
 						message: "操作成功",
