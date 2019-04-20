@@ -96,6 +96,34 @@ let constants = {
             value: 'nineSmallHosts'
         },
 
+    ],
+    alarmStatusList: [
+        {
+            value: 'unprocessed',
+            name: '未处理'
+        },
+        {
+            value: 'processed',
+            name: '已处理'
+        }
+    ],
+    alarmTypeList: [
+        {
+            value: 'smog',
+            name: '烟雾报警'
+        },
+        {
+            value: 'malfunction',
+            name: '故障报警'
+        },
+        {
+            value: 'lowPressure',
+            name: '低压报警'
+        },
+        {
+            value: 'offline',
+            name: '离线报警'
+        },
     ]
 
 

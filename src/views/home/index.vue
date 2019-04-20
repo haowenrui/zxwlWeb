@@ -202,8 +202,10 @@
                 if(!res.status){
                     this.conpanyPositionList = res.data;
 
-                    this.map.center = [this.conpanyPositionList[0].lon,this.conpanyPositionList[0].lat]
                     this.conpanyPositionList.forEach(item => {
+                        if(item.id === jsGetCookie('_CURRENT_COMPANY_ID_')){
+                            this.map.center = [item.lon,item.lat]
+                        }
                         if(item.lon && item.lat){
                             self.markers.push({
                                 position: [item.lon,item.lat],

@@ -2,12 +2,18 @@
     <div>
         <el-form ref="form" :inline="true" :model="queryParams" size="small">
             <el-form-item label="设备名称:" prop="name">
-                <el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+                <el-input v-model.trim="queryParams.deviceName" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+            </el-form-item>
+            <el-form-item label="状态:" prop="type">
+                <el-select placeholder="请选择" class="select-method" v-model="queryParams.alarmStatus">
+                    <el-option key="" label="全部" value=""></el-option>
+                    <el-option v-for="item in this.$constants.alarmStatusList" :label="item.name" :value="item.value" :key="item.value"></el-option>
+                </el-select>
             </el-form-item>
             <el-form-item label="类型:" prop="type">
-                <el-select placeholder="请选择" class="select-method" v-model="queryParams.type">
+                <el-select placeholder="请选择" class="select-method" v-model="queryParams.alarmType">
                     <el-option key="" label="全部" value=""></el-option>
-                    <el-option v-for="item in this.$constants.merchantTypeList" :label="item.label" :value="item.value" :key="item.value"></el-option>
+                    <el-option v-for="item in this.$constants.alarmTypeList" :label="item.name" :value="item.value" :key="item.value"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -17,16 +23,16 @@
 
         </el-form>
         <div>
-            <div class="clear-fix mb10">
+            <!-- <div class="clear-fix mb10">
                 <el-button class="button-query fr mr10" type="warning" @click="deleteRole" size="small">导出报警详情</el-button>
-            </div>
-            <el-table :data="tBody" border style="width: 100%" size="small" @selection-change="handleSelectionChange">
-                <el-table-column type="selection" width="55">
-                </el-table-column>
+            </div> -->
+            <el-table :data="alarmHistioryList" border style="width: 100%" size="small">
+                <!-- <el-table-column type="selection" width="55">
+                </el-table-column> -->
                 <el-table-column align="center" v-for="item in tHead" :key="item.prop" :prop="item.prop" :label="item.label" :width="item.width"
                     :formatter="item.formatter">
                 </el-table-column>
-                <el-table-column align="center" label="操作" width="">
+                <!-- <el-table-column align="center" label="操作" width="">
                     <template slot-scope="scope">
 
                         <el-tooltip effect="dark" content="查看" placement="bottom">
@@ -37,10 +43,10 @@
                         </el-tooltip>
                         
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
-            <el-pagination @current-change="handleCurrentChange" :current-page=currentPage :page-size=pageSize layout="total, prev, pager, next, jumper"
-                :total=total background class="page" v-show="total > 0" :disabled="queryingShowLoading">
+            <el-pagination @current-change="handleCurrentChange" :current-page="queryParams.pageNumber" :page-size="queryParams.pageSize" layout="total, prev, pager, next, jumper"
+                :total="total" class="page" v-show="total > 0" :disabled="queryingShowLoading">
             </el-pagination>
         </div>
     </div>
@@ -50,6 +56,7 @@
 import { dateFormat, checkDateValid } from '@/tools/utils';
 import {jsGetCookie} from '@/tools/utils';
 import env from '@/common/env';
+import { alarmStatus, alarmType } from '@/filters/index';
 
 export default {
     components:{
@@ -59,22 +66,17 @@ export default {
         return {
             queryingShowLoading: false,
             queryParams: {
-                startTime: '',
-                endTime: '',
-                merchantName: '',
-                provinceCode: '',
-                cityCode: '',
-                merchantType: '',
-                status: '',
-                auditStatus: '',
-                contact: '',
                 pageSize: 10,
-                pageNo: 1,
+                pageNumber: 1,
+                alarmStatus: '',
+                deviceName: '',
+                alarmType: ''
             },
             total: 0,
             pageSize: 10,
             currentPage: 1,
             multipleSelection: [],
+            alarmHistioryList: [],
             pickerOptions1: {
                 disabledDate(time) {
                 return time.getTime() > Date.now();
@@ -82,43 +84,43 @@ export default {
             },
             tHead: [
                 {
-                    prop: 'merchantId',
-                    label: '序号',
+                    prop: 'deviceName',
+                    label: '设备名称',
                     width: ''
                 },
                 {
-                    prop: 'merchantName',
-                    label: '角色名称',
-                    width: ''
-                },
-                {
-                    prop: 'createTime',
-                    label: '创建时间',
+                    prop: 'alarmDate',
+                    label: '报警时间',
                     width: '',
                     formatter: (row, column,cellValue) => {
-                        return dateFormat("yyyy-MM-dd",new Date(cellValue*1000));
+                        return dateFormat("yyyy-MM-dd hh:mm:ss",new Date(cellValue));
                     }
                 },
                 {
-                    prop: 'createTime',
-                    label: '修改时间',
+                    prop: 'alarmStatus',
+                    label: '状态',
                     width: '',
                     formatter: (row, column,cellValue) => {
-                        return dateFormat("yyyy-MM-dd",new Date(cellValue*1000));
+                        return alarmStatus(cellValue);
                     }
                 },
                 {
-                    prop: 'districtName',
-                    label: '创建者',
+                    prop: 'alarmType',
+                    label: '类型',
+                    width: '',
+                    formatter: (row, column,cellValue) => {
+                        return alarmType(cellValue);
+                    }
+                },
+                {
+                    prop: 'companyName',
+                    label: '公司名称',
                     width: '',
                 },
                 {
-                    prop: 'merchantType',
-                    label: '修改者',
+                    prop: 'companyAddress',
+                    label: '公司地址',
                     width: '',
-                    formatter: (row, column, cellValue) => {
-                        return merchantTypeFilter(cellValue);
-                    }
                 },
             ],
             tBody:[]
@@ -131,48 +133,26 @@ export default {
     created(){
     },
     mounted(){
-        this.queryMerchantsList();
+        this.getAlarmList();
     },
     methods:{
         onQuery(){
-            this.queryParams.pageNo = 1;
-            this.queryMerchantsList();
+            this.queryParams.pageNumber = 1;
+            this.getAlarmList();
         },
          
-        addNew(){
-            this.$router.push({
-                path: '/addNewMerchant'
-            })
-        },
-        _checkSchoolInfo(info){
-            this.$router.push({
-                path: '/merchantDetail',
-                query: {
-                    merchantId: info.merchantId
-                }
-            })
-        },
         handleCurrentChange(page) {
-            this.queryParams.pageNo = page;
-            this.queryMerchantsList();
+            this.queryParams.pageNumber = page;
+            this.getAlarmList();
         },
-        async queryMerchantsList(){
-            let message = checkDateValid(this.queryParams.startTime,this.queryParams.endTime);
-            if (message) {
-                this.$message.warning(message);
-                return;
-            }
-            const response = await this.$http.post(this.$urlApi.queryMerchantsList,this.queryParams); 
-            this.tBody = response.data.rows;
-            this.total = response.data.total;
-            this.queryParams.pageNo = response.data.pageNo;
-        },
-        _editSchoolInfo(info){
-            
-        },
-        handleSelectionChange(val) {
-            this.multipleSelection = val;
-        },
+
+        async getAlarmList(){
+            let self = this;
+            const res = await this.$http.post(this.$equApi.alarmList,this.queryParams);
+            this.alarmHistioryList = res.data.content;
+            this.total = res.data.totalElements;
+        }
+        
     }
 }
 </script>

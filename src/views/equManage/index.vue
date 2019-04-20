@@ -68,7 +68,7 @@
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
                 </el-button>
                 <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}" :data="{deviceName: uploadType}"
-                :on-success="uploadSuccess" :on-error="uploadFailure" :before-upload="beforeUpload"
+                :on-success="uploadSuccess()" :on-error="uploadFailure" :before-upload="beforeUpload"
                 :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入设备
                     </el-button>
@@ -108,7 +108,6 @@
                 uploadAndDownload: false,
                 uploadType: 'nbSmoke',
                 equList: [],
-                editShow: this.$permissionShow('equipment_edit'),
 				queryParams: {
 					pageSize: 10,
 					pageNumber: 1,
@@ -139,6 +138,14 @@
 						width: '',
                         formatter: (row, column, cellValue) => {
                             return deviceStatus(cellValue);
+						}
+                    },
+                    {
+						prop: 'createTime',
+						label: '新增时间',
+						width: '',
+                        formatter: (row, column, cellValue) => {
+                            return dateFormat("yyyy-MM-dd hh:mm:ss", new Date(cellValue));
 						}
 					},
 					{
@@ -183,7 +190,10 @@
 		computed: {
 			templateURL: function () {
 				return this.$equApi.importDevice;
-			}
+            },
+            editShow: function() {
+                return this.$permissionShow('equipment_edit')
+            },
 		},
 		created() {},
 		mounted() {
@@ -235,7 +245,7 @@
 				this.importingShowLoading = true;
 			},
 			uploadSuccess(item) {
-				this.importingShowLoading = false;
+                this.importingShowLoading = false;
 				return (response, file, fileList) => {
 					if (response.result == "SUCCESS") {
 						this.$message({
@@ -243,11 +253,12 @@
 							message: '导入成功',
 							type: "success"
                         });
+                        this.uploadAndDownload = false;
                         this.refreshData();
 					} else {
 						this.$message({
 							showClose: true,
-							message: response.message,
+							message: '导入失败',
 							type: "error"
 						});
 					}
@@ -257,7 +268,7 @@
 				this.importingShowLoading = false;
 				this.$message({
 					showClose: true,
-					message: "上传失败",
+					message: "导入失败",
 					type: "error"
 				});
 			},

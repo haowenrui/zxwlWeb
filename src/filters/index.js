@@ -60,3 +60,39 @@ let deviceStatus = type => {
     return status;
 }
 export { deviceStatus }
+
+
+let alarmStatus = status => {
+    let result = '';
+    if(status == 'processed'){
+        result = '已处理';
+    }else{
+        result = '未处理'
+    }
+    return result;
+}
+
+export { alarmStatus }
+
+
+let alarmType = type => {
+    let result = '';
+    switch(type){
+        case 'smog':
+            result = '烟雾报警';
+            break;
+        case 'malfunction':
+            result = '故障报警';
+            break;
+        case 'lowPressure':
+            result = '低压报警';
+            break;
+        case 'offline':
+            result = '离线报警';
+            break;
+    }
+    return result;
+}
+
+export { alarmType }
+

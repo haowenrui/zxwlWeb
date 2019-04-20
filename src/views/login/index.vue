@@ -110,6 +110,12 @@
                         // path: '/home'
                         path: '/roleManage'
                     });
+                }else{
+                    this.loading = false;
+                    this.$message({
+                        type: 'error',
+						message: res.message
+					});
                 }
 
                 

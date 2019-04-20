@@ -193,28 +193,33 @@
 				}
             },
             async queryCurrentPermission(){
-				const res = await this.$http.get(this.$urlApi.queryCurrentPermission,{
+				const res = await this.$http.get(this.$urlApi.queryPermission,{
                     type: 'WEB',
-                    companyId: this.companyId
                 });
 
                 this.setPermissionList(res.data);
             },
+            async selectComponay(callback){
+                const res = await this.$http.get(this.$urlApi.selectCompany,{
+                    type: 'WEB',
+                    companyId: this.companyId
+                });
+
+                if(res.result === 'SUCCESS'){
+                    callback && callback();
+                }
+            },
             changeCompany(){
-                // var href = window.location.href;
-                // if (href.indexOf('homeIndex') == -1) {
-                //     window.location.href = "/web/#/role/list";
-                // } else {
-                //     window.location.reload()
-                // }
                 jsAddCookie('_CURRENT_COMPANY_ID_',this.companyId);
                 this.companyList.forEach(item => {
                     if(item.id == this.companyId){
                         this.companyName = item.name;
+                        jsAddCookie('_CURRENT_COMPANY_AREA_',item.code);
+                        this.selectComponay(function(){
+                            window.location.reload()
+                        });
                     }
                 })
-                jsAddCookie('_CURRENT_COMPANY_NAME_',this.companyName);
-                window.location.reload()
             },
             submit(){
                 this.$refs.ruleForm2.validate(value => {

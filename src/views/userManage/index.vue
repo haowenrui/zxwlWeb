@@ -43,12 +43,16 @@
                         <el-tooltip effect="dark" content="编辑" placement="bottom" v-if="editShow">
                             <el-button type="text" @click="_editUserInfo(scope.row)" class="iconfont icon-biji"></el-button>
                         </el-tooltip>
+
+                        <el-tooltip effect="dark" :content="scope.row.isUsed ? '停用' : '启用'" placement="bottom" v-if="editShow">
+                            <el-button style="font-size: 20px;" type="text" @click="_editUserAuth(scope.row)" :class="{'el-icon-circle-close-outline' : scope.row.isUsed,'el-icon-circle-check-outline' : !scope.row.isUsed}"></el-button>
+                        </el-tooltip>
                         
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination @current-change="handleCurrentChange" :current-page=currentPage :page-size=pageSize layout="total, prev, pager, next, jumper"
-                :total=total background class="page" v-show="total > 0" :disabled="queryingShowLoading">
+            <el-pagination @current-change="handleCurrentChange" :current-page="queryParams.pageNumber" :page-size="queryParams.pageSize" layout="total, prev, pager, next"
+                :total="total"  class="page" v-show="total > 0" :disabled="queryingShowLoading">
             </el-pagination>
         </div>
 
@@ -65,7 +69,7 @@
 </template>
 
 <script>
-import { dateFormat, checkDateValid } from '@/tools/utils';
+import { dateFormat, checkDateValid, jsGetCookie } from '@/tools/utils';
 import dialogAdd from './component/dialogAdd';
 import dialogCheck from './component/dialogCheck';
 import {  userTypeFilter } from '@/filters/index';
@@ -84,7 +88,6 @@ export default {
             dialogAdd: false,
             dialogCheck: false,
             userInfo: {},
-            editShow: this.$permissionShow('user_edit'),
             queryParams: {
                 name: '',
                 username: '',
@@ -92,8 +95,6 @@ export default {
                 pageNumber: 1,
             },
             total: 0,
-            pageSize: 10,
-            currentPage: 1,
             multipleSelection: [],
             pickerOptions1: {
                 disabledDate(time) {
@@ -151,7 +152,11 @@ export default {
     computed:{
         templateURL: function() {
             return this.$urlApi.schoolImport;
-        }
+        },
+        editShow: function() {
+            return this.$permissionShow('user_edit')
+        },
+
     },
     created(){
     },
@@ -160,7 +165,7 @@ export default {
     },
     methods:{
         onQuery(){
-            this.queryParams.pageNo = 1;
+            this.queryParams.pageNumber = 1;
             this.queryUserList();
         },
         refreshData(){
@@ -175,14 +180,13 @@ export default {
             this.dialogCheck = true;
         },
         handleCurrentChange(page) {
-            this.queryParams.pageNo = page;
+            this.queryParams.pageNumber = page;
             this.queryUserList();
         },
         async queryUserList(){
             const response = await this.$http.post(this.$urlApi.getUserList,this.queryParams); 
             this.tBody = response.data.content;
             this.total = response.data.totalElements;
-            this.queryParams.pageNumber = response.data.pageable.pageNumber + 1;
         },
         _editUserInfo(info){
             this.userInfo = info;
@@ -193,6 +197,31 @@ export default {
         },
         deleteRole(){
 
+        },
+        async _editUserAuth(info){
+            let tips = '是否确定' + (info.isUsed ? '停用' : '启用') +'该用户';
+            this.$confirm(tips, '提示', {
+                confirmButtonText: '确定',
+                showCancelButton: false,
+                type: 'warning'
+            }).then(() => {
+                this.editAuth(info);
+            }).catch(() => {
+            });
+        },
+        async editAuth(info){
+            const response = await this.$http.post(this.$urlApi.editLoginAuth,{
+                userId: info.userId,
+                isUsed: !info.isUsed
+            }); 
+
+            if(response.result == 'SUCCESS'){
+                this.$message({
+                    type: 'success',
+                    message: '操作成功'
+                });
+                this.onQuery();
+            }
         }
     }
 }

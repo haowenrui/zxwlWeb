@@ -1,21 +1,21 @@
 <template>
     <div>
-        <!-- <el-form ref="form" :inline="true" :model="queryParams" size="small">
+        <el-form ref="form" :inline="true" :model="queryParams" size="small">
             <el-form-item label="角色名称:" prop="name">
                 <el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="类型:" prop="type">
+            <!-- <el-form-item label="类型:" prop="type">
                 <el-select placeholder="请选择" class="select-method" v-model="queryParams.type">
                     <el-option key="" label="全部" value=""></el-option>
                     <el-option v-for="item in this.$constants.merchantTypeList" :label="item.label" :value="item.value" :key="item.value"></el-option>
                 </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item>
                 <el-button class="button-query" type="primary" :loading="queryingShowLoading" @click="onQuery">查询
                 </el-button>
             </el-form-item>
 
-        </el-form> -->
+        </el-form>
         <div>
             <div class="clear-fix mb10">
                 <el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('role_create')">新增角色</el-button>
@@ -40,8 +40,8 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination @current-change="handleCurrentChange" :current-page=currentPage :page-size=pageSize layout="total, prev, pager, next, jumper"
-                :total=total background class="page" v-show="total > 0" :disabled="queryingShowLoading">
+            <el-pagination @current-change="handleCurrentChange" :current-page="queryParams.pageNumber" :page-size="queryParams.pageSize" layout="total, prev, pager, next, jumper"
+                :total="total" class="page" v-show="total > 0" :disabled="queryingShowLoading">
             </el-pagination>
         </div>
 
@@ -76,8 +76,9 @@ export default {
             dialogAdd: false,
             dialogCheck: false,
             roleInfo: '',
-            editShow: this.$permissionShow('role_edit'),
             queryParams: {
+                name: '',
+                type: '',
                 pageSize: 10,
                 pageNumber: 1,
             },
@@ -134,6 +135,9 @@ export default {
     watch:{
     },
     computed:{
+        editShow: function() {
+            return this.$permissionShow('role_edit')
+        },
     },
     created(){
         

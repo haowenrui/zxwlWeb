@@ -24,7 +24,7 @@ let urlApi = {
     addCompony: '/company/add',
     editCompony: '/company/edit',
     deleteCompony: '/company/delete',
-    queryCurrentPermission: '/company/selectCompany',
+    selectCompany: '/company/selectCompany',
     getCompanyPosition: '/company/position',
 
     //用户管理
@@ -33,7 +33,7 @@ let urlApi = {
     editLoginAuth: '/user/editLoginAuthority',
     addUser: '/user/add',
     editUser: '/user/edit',
-    checkToken: '/system/checkToken'
+    checkToken: '/system/checkToken',
 }
 
 for (let key in urlApi) {

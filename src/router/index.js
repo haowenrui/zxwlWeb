@@ -15,8 +15,8 @@ const AlarmManage = () =>
     import ("@/views/home/index");
 const EquipmentManage = () =>
     import ("@/views/equManage/index");
-// const AlarmManage = () =>
-//     import ("@/views/alarmManage/index");
+const AlarmList = () =>
+    import ("@/views/alarmManage/index");
 
 Vue.use(Router)
 
@@ -42,6 +42,20 @@ export default new Router({
         //     component: Home,
         //     name: "报警中心"
         // },
+
+        {
+            path: "/",
+            component: Layout,
+            redirect: "/alarmList",
+            noDropdown: false, //只有一个节点
+            children: [
+                {
+                    path: "/alarmList",
+                    component: AlarmList,
+                    name: "报警历史"
+                }
+            ]
+        },
 
         {
             path: "/",
@@ -114,8 +128,8 @@ export default new Router({
         },
 
         {
-            path: "/alarmManage",
-            name: "alarmManage",
+            path: "/monitorCenter",
+            name: "monitorCenter",
             component: AlarmManage,
             name: "报警中心"
         },
