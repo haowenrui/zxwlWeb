@@ -96,7 +96,7 @@
 			</el-col>
 		</el-row>
         <div class="alarm-sound">
-            <audio id="sound" autoplay="false" src="../../../static/fire.mp3"></audio>
+            <audio id="sound" src="../../../static/fire.mp3"></audio>
         </div>
 
         <el-dialog v-if="resolveAlarmVisible" title="报警处理" :visible.sync="resolveAlarmVisible" width="30%">
@@ -165,7 +165,6 @@
 		watch: {},
 		computed: {},
 		created() {
-            this.initWebSocket();
         },
         destroyed(){
             this.connectFlag = false;
@@ -192,6 +191,9 @@
                     imageSize: new AMap.Size(40, 40)   // 根据所设置的大小拉伸或压缩图片
                 });
             },1000);
+            setTimeout(function(){
+                _self.initWebSocket();
+            },2000)
 		},
 		methods: {
             async getCompanyPositionList(){
@@ -755,7 +757,7 @@
         top: 20px;
         left: 0px;
         width: 180px;
-        height: 280px;
+        height: 330px;
         overflow: hidden;
         
         li{
@@ -764,7 +766,7 @@
             margin-bottom: 20px;
             border: 1px solid #bba225;
             width: 100%;
-            max-height: 100px;
+            height: 94px;
         }
     }
 

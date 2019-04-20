@@ -179,6 +179,7 @@
                     jsDeleteCookie('_CURRENT_COMPANY_NAME_');
                     jsDeleteCookie('_CURRENT_COMPANY_AREA_');
                     jsDeleteCookie('_CURRENT_USER_ID_');
+                    jsDeleteCookie('_CURRENT_USER_NAME_');
 					document.title = 'zxwl';
 					this.$router.push({
 						path: 'login'
