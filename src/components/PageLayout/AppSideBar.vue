@@ -57,7 +57,7 @@
 					</router-link>
 				</el-submenu>
 
-                <template v-if="item.name === '报警中心'">
+                <template v-if="item.name === '监控中心'">
                     <router-link class="links" tag="a" target="_blank" v-if="!item.children || item.children.length == 0" :to="item.path">
                         <el-menu-item :index="item.path">
                             <i :class="item.icon"></i>{{item.name}} 
