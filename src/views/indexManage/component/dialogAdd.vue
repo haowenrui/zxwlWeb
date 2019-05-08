@@ -100,13 +100,13 @@ export default {
         },
         async queryIndexInfo(){
             const response = await this.$http.get(this.$equApi.indexDetail,{
-                id: this.equipmentInfo.deviceId
+                id: this.equipmentInfo.id
             }); 
             this.form = response.data;
         },
         async _addAndModifyEquipment(){
             let response = null;
-            if(!this.equipmentInfo.deviceId){
+            if(!this.equipmentInfo.id){
                 response = await this.$http.post(this.$equApi.indexAdd,this.form); 
             }else{
                 response = await this.$http.post(this.$equApi.indexEdit,this.form); 

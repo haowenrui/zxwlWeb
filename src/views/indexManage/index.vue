@@ -143,7 +143,7 @@
 						width: '',
                     },
                     {
-						prop: 'type',
+						prop: 'typeName',
 						label: '指标类型',
 						width: '',
                         formatter: (row, column, cellValue) => {
