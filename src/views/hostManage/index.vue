@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-form ref="form" :inline="true" :model="queryParams" size="small">
-			<el-form-item label="设备名称:" prop="name">
+			<el-form-item label="主机名称:" prop="name">
 				<el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="请输入">
 				</el-input>
 			</el-form-item>
@@ -13,10 +13,10 @@
 		</el-form>
 		<div class="use-table">
 			<div class="clear-fix mb10">
-				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增设备</el-button>
-				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除设备
+				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增主机</el-button>
+				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除主机
 				</el-button>
-                <el-button size="small" class="button-query fr mr10" type="success" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">导入设备
+                <el-button size="small" class="button-query fr mr10" type="success" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">导入主机
 					</el-button>
 				<el-button class="button-query fr mr10" type="primary" size="small" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">下载模板
 				</el-button>
@@ -70,7 +70,7 @@
                 <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}" :data="{deviceName: uploadType}"
                 :on-success="uploadSuccess()" :on-error="uploadFailure" :before-upload="beforeUpload"
                 :disabled="importingShowLoading" :show-file-list="false">
-                    <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入设备
+                    <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入主机
                     </el-button>
                 </el-upload>
 			</div>
@@ -125,12 +125,12 @@
 				},
 				tHead: [{
 						prop: 'deviceQRCode',
-						label: '设备编号',
+						label: '主机编号',
 						width: ''
 					},
 					{
 						prop: 'deviceName',
-						label: '设备名称',
+						label: '主机名称',
 						width: ''
 					},
                     {
@@ -278,12 +278,7 @@
 				this.queryEquipmentList();
 			},
 			async queryEquipmentList() {
-				// let message = checkDateValid(this.queryParams.startTime,this.queryParams.endTime);
-				// if (message) {
-				//     this.$message.warning(message);
-				//     return;
-				// }
-				const response = await this.$http.get(this.$equApi.equipmentList, this.queryParams);
+				const response = await this.$http.get(this.$equApi.hostList, this.queryParams);
 				this.tBody = response.data.equipmentList;
 				this.total = parseInt(response.data.equipmentCount);
 				// this.queryParams.pageNumber = response.data.pageNumber;

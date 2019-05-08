@@ -119,6 +119,8 @@
                 if(response.result == 'SUCCESS'){
                     this.$message.success('删除成功');
                     this.getCompany();
+                }else{
+                    this.$message.error(response.message);
                 }
             },
             selectArea(data){

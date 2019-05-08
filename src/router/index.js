@@ -17,6 +17,10 @@ const EquipmentManage = () =>
     import ("@/views/equManage/index");
 const AlarmList = () =>
     import ("@/views/alarmManage/index");
+const HostManage = () =>
+    import ("@/views/hostManage/index");
+const IndexManage = () =>
+    import ("@/views/indexManage/index");
 
 Vue.use(Router)
 
@@ -95,6 +99,34 @@ export default new Router({
                     path: "/companyManage",
                     component: AreaManage,
                     name: "片区管理"
+                }
+            ]
+        },
+
+        {
+            path: "/",
+            component: Layout,
+            redirect: "/hostManage",
+            noDropdown: false, //只有一个节点
+            children: [
+                {
+                    path: "/hostManage",
+                    component: HostManage,
+                    name: "主机管理"
+                }
+            ]
+        },
+
+        {
+            path: "/",
+            component: Layout,
+            redirect: "/indexManage",
+            noDropdown: false, //只有一个节点
+            children: [
+                {
+                    path: "/indexManage",
+                    component: IndexManage,
+                    name: "指标管理"
                 }
             ]
         },

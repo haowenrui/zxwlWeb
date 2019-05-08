@@ -1,7 +1,13 @@
 <template>
 	<div>
 		<el-form ref="form" :inline="true" :model="queryParams" size="small">
-			<el-form-item label="设备名称:" prop="name">
+            <el-form-item label="指标类型:" prop="name">
+				<el-select v-model="queryParams.configerId" placeholder="请选择" class="input-search fl mr10" clearable size="small">
+					<el-option v-for="item in configerList" :key="item.validue" :label="item.des" :value="item.id">
+					</el-option>
+				</el-select>
+			</el-form-item>
+			<el-form-item label="指标名称:" prop="name">
 				<el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="请输入">
 				</el-input>
 			</el-form-item>
@@ -13,12 +19,8 @@
 		</el-form>
 		<div class="use-table">
 			<div class="clear-fix mb10">
-				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增设备</el-button>
-				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除设备
-				</el-button>
-                <el-button size="small" class="button-query fr mr10" type="success" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">导入设备
-					</el-button>
-				<el-button class="button-query fr mr10" type="primary" size="small" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">下载模板
+				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增</el-button>
+				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除
 				</el-button>
 			</div>
 			<el-table :data="tBody" border style="width: 100%" size="small" @selection-change="handleSelectionChange">
@@ -30,10 +32,10 @@
 				<el-table-column align="center" label="操作" width="">
 					<template slot-scope="scope">
 
-						<el-tooltip effect="dark" content="查看" placement="bottom">
+						<!-- <el-tooltip effect="dark" content="查看" placement="bottom">
 							<el-button type="text" @click="_checkSchoolInfo(scope.row)" class="iconfont icon-chakan">
 							</el-button>
-						</el-tooltip>
+						</el-tooltip> -->
 						<el-tooltip effect="dark" content="编辑" placement="bottom" v-if="editShow">
 							<el-button type="text" @click="_editSchoolInfo(scope.row)" class="iconfont icon-biji">
 							</el-button>
@@ -48,7 +50,7 @@
 			</el-pagination>
 		</div>
 
-		<el-dialog v-if="dialogAdd" :title="equipmentInfo.deviceId ? '编辑' : '新增'" :visible.sync="dialogAdd" width="60%">
+		<el-dialog v-if="dialogAdd" :title="equipmentInfo.id ? '编辑' : '新增'" :visible.sync="dialogAdd" width="60%">
 			<dialogAdd :show.sync="dialogAdd" @refreshData="refreshData" :equipmentInfo="equipmentInfo">
 			</dialogAdd>
 		</el-dialog>
@@ -107,8 +109,10 @@
 				importingShowLoading: false,
                 uploadAndDownload: false,
                 uploadType: 'nbSmoke',
+                configerList: [],
                 equList: [],
 				queryParams: {
+                    configerId: '',
                     name: '',
 					pageSize: 10,
 					pageNumber: 1,
@@ -124,63 +128,42 @@
 					}
 				},
 				tHead: [{
-						prop: 'deviceQRCode',
-						label: '设备编号',
+						prop: 'equipTypeName',
+						label: '设备类别',
 						width: ''
 					},
 					{
-						prop: 'deviceName',
-						label: '设备名称',
+						prop: 'name',
+						label: '指标名称',
 						width: ''
 					},
                     {
-						prop: 'deviceOnline',
-						label: '状态',
+						prop: 'code',
+						label: '编码',
 						width: '',
-                        formatter: (row, column, cellValue) => {
-                            return deviceStatus(cellValue);
-						}
                     },
                     {
-						prop: 'createTime',
-						label: '新增时间',
+						prop: 'type',
+						label: '指标类型',
 						width: '',
                         formatter: (row, column, cellValue) => {
-                            return dateFormat("yyyy-MM-dd hh:mm:ss", new Date(cellValue));
+                            return cellValue;
 						}
 					},
 					{
-						prop: 'proComName',
-						label: '厂家名称',
+						prop: 'unit',
+						label: '单位',
 						width: ''
 					},
 					{
-						prop: 'proType',
-						label: '产品类型',
+						prop: 'maxValue',
+						label: '最大值',
 						width: ''
 					},
 					{
-						prop: 'insFrequency',
-						label: '巡检频次',
+						prop: 'minValue',
+						label: '最小值',
 						width: ''
-					},
-					{
-						prop: 'overTime',
-						label: '过保时间',
-						width: '',
-						formatter: (row, column, cellValue) => {
-							return dateFormat("yyyy-MM-dd", new Date(cellValue));
-						}
-					},
-					{
-						prop: 'districtName',
-						label: '创建者',
-						width: '',
-					},
-					{
-						prop: 'merchantType',
-						label: '修改者',
-						width: '',
 					},
 				],
 				tBody: [],
@@ -198,7 +181,8 @@
 		},
 		created() {},
 		mounted() {
-			this.token = jsGetCookie('_TOKEN_');
+            this.token = jsGetCookie('_TOKEN_');
+            this.getEquipmentConfiger();
 			this.queryEquipmentList();
 		},
 		methods: {
@@ -209,17 +193,21 @@
 
 			addNew() {
 				this.dialogAdd = true;
-			},
+            },
+            async getEquipmentConfiger(){
+                const response = await this.$http.get(this.$equApi.getEquipmentConfiger);
+                this.configerList = response.data;
+            },
 			async deleteEquipment() {
 				let selectArr = [];
 				if (this.multipleSelection.length <= 0) {
 					return;
 				} else {
 					this.multipleSelection.forEach(item => {
-						selectArr.push(item.deviceId);
+						selectArr.push(item.id);
 					});
 				}
-				const response = await this.$http.post(this.$equApi.deleteEquipment, selectArr);
+				const response = await this.$http.post(this.$equApi.indexDelete, selectArr);
 
 				if (response.result == "SUCCESS") {
 					this.$message({
@@ -278,13 +266,8 @@
 				this.queryEquipmentList();
 			},
 			async queryEquipmentList() {
-				// let message = checkDateValid(this.queryParams.startTime,this.queryParams.endTime);
-				// if (message) {
-				//     this.$message.warning(message);
-				//     return;
-				// }
-				const response = await this.$http.get(this.$equApi.equipmentList, this.queryParams);
-				this.tBody = response.data.equipmentList;
+				const response = await this.$http.post(this.$equApi.indexList, this.queryParams);
+				this.tBody = response.data.content;
 				this.total = parseInt(response.data.equipmentCount);
 				// this.queryParams.pageNumber = response.data.pageNumber;
 			},
@@ -298,12 +281,6 @@
 			refreshData() {
 				this.onQuery();
 			},
-			async downloadEquTemplate() {
-				// const response = await this.$http.get(this.$equApi.downloadTemplate, {
-				// 	deviceName: this.uploadType
-				// });
-				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceName=' + this.uploadType)
-			}
 		}
 	}
 

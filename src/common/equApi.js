@@ -28,7 +28,20 @@ let equApi = {
     monthlyAlarmStatistics: '/statistics/monthlyAlarm',
 
     sendAlarmMessage: '/alarm/sendAlarmMessage',
-    updateAlarmStatus: '/alarm/updateAlarmStatus'
+    updateAlarmStatus: '/alarm/updateAlarmStatus',
+
+    hostList: '/host/findDeviceByInsUser',
+    hostDelete: '/host/delete',
+    hostSave: '/host/save',
+    hostUpdate: '/host/update',
+
+    indexList: '/equipmentItem/list',
+    indexType: '/equipmentItem/getItemType',
+    indexEdit: '/equipmentItem/eidt',
+    indexDelete: '/equipmentItem/delete',
+    indexAdd: '/equipmentItem/add',
+    getEquipmentConfiger: '/equipmentConfiger/getEquipmentConfiger',
+    indexDetail: '/equipmentItem/detail'
 }
 
 for (let key in equApi) {
