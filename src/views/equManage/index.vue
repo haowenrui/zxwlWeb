@@ -61,8 +61,12 @@
 
 		<el-dialog v-if="uploadAndDownload" title="上传与下载" :visible.sync="uploadAndDownload" width="60%">
 			<div class="clearfix mt10 mb10 pl30">
-				<el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 50%">
-					<el-option v-for="item in this.$constants.equType" :key="item.value" :label="item.name" :value="item.value">
+				<el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 200px" @change="changeEqu">
+					<el-option v-for="item in hostList" :key="item.value" :label="item.name" :value="item.value">
+					</el-option>
+				</el-select>
+                <el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 200px">
+					<el-option v-for="item in companyList" :key="item.value" :label="item.name" :value="item.value">
 					</el-option>
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
@@ -184,7 +188,9 @@
 					},
 				],
 				tBody: [],
-				equipmentInfo: {}
+                equipmentInfo: {},
+                hostList: [],
+                companyList: []
 			}
 		},
 		watch: {},
@@ -202,6 +208,18 @@
 			this.queryEquipmentList();
 		},
 		methods: {
+            async queryHostType(){
+				const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
+                    note: '主机'
+                });
+                this.hostList = response.data;
+            },
+            async changeEqu(){
+                const response = await this.$http.get(this.$equApi.getEquipmentConfiger,{
+                    miniTypeCode: miniTypeCode
+                });
+                this.companyList = response.data;
+            },
 			onQuery() {
 				this.queryParams.pageNumber = 1;
 				this.queryEquipmentList();

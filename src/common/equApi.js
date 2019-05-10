@@ -18,6 +18,7 @@ let equApi = {
     downloadTemplate: '/equipment/downloadTemplatezxwl',
     findEquipmentItemHistory: '/equipment/findEquipmentItemHistory',
     findEquipmentModleItem: '/equipment/findEquipmentModleItem',
+    findMiniTypeByNoteAndParentCode: '/dict/findMiniTypeByNoteAndParentCode',
 
     alarmList: '/alarm/list',
     alarmStatistics: '/statistics/alarmType',
@@ -34,6 +35,7 @@ let equApi = {
     hostDelete: '/host/delete',
     hostSave: '/host/save',
     hostUpdate: '/host/update',
+    findByHostId: '/host/findByHostId',
 
     indexList: '/equipmentItem/list',
     indexType: '/equipmentItem/getItemType',
