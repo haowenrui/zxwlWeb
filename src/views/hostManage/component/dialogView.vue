@@ -1,69 +1,91 @@
 <template>
 	<div>
-		<el-form ref="form" :model="form" :inline="true" label-width="100px" size="mini">
-			<el-form-item label="设备名称:">
-				<span>{{form.deviceName}}</span>
-			</el-form-item>
-			<el-form-item label="设备编码:">
-				<span>{{form.deviceQRCode}}</span>
-			</el-form-item>
-			<el-form-item label="通信编号:">
-				<span>{{form.letterCode}}</span>
-			</el-form-item>
-			<el-form-item label="生产商:">
-				<span>{{form.proComName}}</span>
-			</el-form-item>
-			<el-form-item label="厂家编码:">
-				<span>{{form.proComCode}}</span>
-			</el-form-item>
-			<el-form-item label="产品类型:">
-				<span>{{form.proType}}</span>
-			</el-form-item>
-			<el-form-item label="最小值:">
-				<span>{{form.minValue}}</span>
-			</el-form-item>
-			<el-form-item label="最大值:">
-				<span>{{form.maxValue}}</span>
-			</el-form-item>
-			<el-form-item label="通信协议:">
-				<span>{{form.letterAgreement}}</span>
-			</el-form-item>
-			<el-form-item label="传输方式:">
-				<span>{{form.traMethod}}</span>
-			</el-form-item>
-			<el-form-item label="是否模拟:">
-				<span>{{form.isSimulate}}</span>
-			</el-form-item>
-			<el-form-item label="版本号:">
-				<span>{{form.version}}</span>
-			</el-form-item>
-			<el-form-item label="巡检频次:">
-				<span>{{form.insFrequency}}</span>
-			</el-form-item>
-			<el-form-item label="过保时间:">
-				<span>{{form.overTime}}</span>
-			</el-form-item>
-			<el-form-item label="消防设施:">
-				<span>{{form.fireFacility}}</span>
-			</el-form-item>
+		<el-form ref="form" :model="form" :inline="true" label-width="140px" size="mini">
+			<el-form-item label="主机编码:">
+                <span>{{form.hostQRCode}}</span>
+            </el-form-item>
+            <el-form-item label="主机名称:">
+                <span>{{form.hostName}}</span>
+            </el-form-item>
+            <el-form-item label="主机类型:">
+                <span>{{form.hostType}}</span>
+            </el-form-item>
+            <el-form-item label="主机小类型:">
+                <span>{{form.hostTypeMini}}</span>
+            </el-form-item>
+            <el-form-item label="安装人id:">
+                <span>{{form.insUserId}}</span>
+            </el-form-item>
+            <el-form-item label="安装位置:">
+                <span>{{form.insLocation}}</span>
+            </el-form-item>
+            <el-form-item label="安装日期:">
+                <span>{{form.insDate}}</span>
+            </el-form-item>
+            <el-form-item label="CCID:">
+                <span>{{form.ccid}}</span>
+            </el-form-item>
+            <el-form-item label="使用状况:">
+                <span>{{form.useStatus}}</span>
+            </el-form-item>
+            <el-form-item label="传输方式:">
+                <span>{{form.transferMethod}}</span>
+            </el-form-item>
+            <el-form-item label="是否模拟:">
+                <span>{{form.isSimulate}}</span>
+            </el-form-item>
+            <el-form-item label="通信协议:">
+                <span>{{form.letterAgreement}}</span>
+            </el-form-item>
+            <el-form-item label="版本号:">
+                <span>{{form.version}}</span>
+            </el-form-item>
+            <el-form-item label="厂家编码:">
+                <span>{{form.proComCode}}</span>
+            </el-form-item>
+            <el-form-item label="生产商:">
+                <span>{{form.proComName}}</span>
+            </el-form-item>
+            <el-form-item label="产品类型:">
+                <span>{{form.proType}}</span>
+            </el-form-item>
+            <el-form-item label="所属企业标识号:">
+                <span>{{form.opeCompany}}</span>
+            </el-form-item>
+            <el-form-item label="所属服务器标识号:">
+                <span>{{form.opeService}}</span>
+            </el-form-item>
+            <el-form-item label="巡检频次:">
+                <span>{{form.insFrequency}}</span>
+            </el-form-item>
+            <el-form-item label="过保时间:">
+                <span>{{form.overTime}}</span>
+            </el-form-item>
+            <el-form-item label="消防设施:">
+                <span>{{form.fireFacility}}</span>
+            </el-form-item>
+            <el-form-item label="片区id:">
+                <span>{{form.companyId}}</span>
+            </el-form-item>
+            <el-form-item label="片区编码:">
+                <span>{{form.companyCode}}</span>
+            </el-form-item>
+            <el-form-item label="新增设备用户名Id:">
+                <span>{{form.addHostUserId}}</span>
+            </el-form-item>
+            <el-form-item label="新增设备用户编码:">
+                <span>{{form.addHostUserCode}}</span>
+            </el-form-item>
+            <el-form-item label="新增设备用户名:">
+                <span>{{form.addHostUserName}}</span>
+            </el-form-item>
+            <el-form-item label="是否在线:">
+                <span>{{form.hostOnline}}</span>
+            </el-form-item>
+            <el-form-item label="设备配置编码:">
+                <span>{{form.equipmentConfigerCode}}</span>
+            </el-form-item>
 		</el-form>
-		<div>
-			<div class="charts-head text-right">
-				<el-select v-model="queryParams.itemCode" placeholder="请选择" size="small">
-					<el-option v-for="item in typeList" :key="item.code" :label="item.name" :value="item.code">
-					</el-option>
-				</el-select>
-				<el-date-picker class="school-manage-date" v-model="queryParams.startTime" type="date"
-					placeholder="开始日期" size="small" format="yyyy-MM-dd" :editable="false" value-format="yyyy-MM-dd">
-				</el-date-picker>
-				<el-date-picker class="school-manage-date" v-model="queryParams.endTime" type="date" placeholder="结束日期"
-					size="small" :editable="false" format="yyyy-MM-dd" value-format="yyyy-MM-dd">
-				</el-date-picker>
-				<el-button class="button-query" type="primary" :loading="queryingShowLoading" @click="queryClick"
-					size="small">查询</el-button>
-			</div>
-			<div id="equHistory"></div>
-		</div>
 		<div class="dialog-footer text-right pb20">
 			<el-button type="primary" @click="cancel" size="small">关 闭</el-button>
 		</div>
@@ -96,8 +118,8 @@ import ECharts from 'echarts';
 		created() {},
 		mounted() {
             this.queryEquipmentInfo();
-            this.queryEquTypeList();
-			this.equHistoryCharts();
+            // this.queryEquTypeList();
+			// this.equHistoryCharts();
 		},
 		methods: {
 			cancel() {
@@ -108,10 +130,10 @@ import ECharts from 'echarts';
 				this.equHistoryCharts();
 			},
 			async queryEquipmentInfo() {
-				const response = await this.$http.get(this.$equApi.queryEquipmentInfo, {
-					equipmentId: this.equipmentInfo.deviceId
+				const response = await this.$http.get(this.$equApi.findByHostId, {
+					hostId: this.equipmentInfo.hostId
 				});
-				this.form = response.data;
+				this.form = response.data.host;
             },
             async queryEquTypeList(){
                 const response = await this.$http.get(this.$equApi.findEquipmentModleItem, {

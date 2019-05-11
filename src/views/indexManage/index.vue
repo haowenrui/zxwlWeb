@@ -192,6 +192,7 @@
 			},
 
 			addNew() {
+                this.equipmentInfo = {};
 				this.dialogAdd = true;
             },
             async getEquipmentConfiger(){
@@ -268,7 +269,7 @@
 			async queryEquipmentList() {
 				const response = await this.$http.post(this.$equApi.indexList, this.queryParams);
 				this.tBody = response.data.content;
-				this.total = parseInt(response.data.equipmentCount);
+				this.total = parseInt(response.data.totalElements);
 				// this.queryParams.pageNumber = response.data.pageNumber;
 			},
 			_editSchoolInfo(info) {

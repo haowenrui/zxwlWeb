@@ -1,8 +1,12 @@
 <template>
 	<div>
 		<el-form ref="form" :inline="true" :model="queryParams" size="small">
-			<el-form-item label="主机名称:" prop="name">
-				<el-input v-model.trim="queryParams.name" clearable class="input-search" size="small" placeholder="请输入">
+			<el-form-item label="安装人id:" prop="name">
+				<el-input v-model.trim="queryParams.insUserId" clearable class="input-search" size="small" placeholder="请输入">
+				</el-input>
+			</el-form-item>
+            <el-form-item label="在线状态:" prop="name">
+				<el-input v-model.trim="queryParams.hostOnline" clearable class="input-search" size="small" placeholder="请输入">
 				</el-input>
 			</el-form-item>
 			<el-form-item>
@@ -27,11 +31,15 @@
 				<el-table-column align="center" v-for="item in tHead" :key="item.prop" :prop="item.prop"
 					:label="item.label" :width="item.width" :formatter="item.formatter">
 				</el-table-column>
-				<el-table-column align="center" label="操作" width="">
+				<el-table-column align="center" label="操作" width="140px">
 					<template slot-scope="scope">
 
 						<el-tooltip effect="dark" content="查看" placement="bottom">
 							<el-button type="text" @click="_checkSchoolInfo(scope.row)" class="iconfont icon-chakan">
+							</el-button>
+						</el-tooltip>
+                        <el-tooltip effect="dark" content="导入" placement="bottom">
+							<el-button type="text" @click="_checkSchoolInfo(scope.row)" class="el-icon-download" style="font-size: 22px;">
 							</el-button>
 						</el-tooltip>
 						<el-tooltip effect="dark" content="编辑" placement="bottom" v-if="editShow">
@@ -48,7 +56,7 @@
 			</el-pagination>
 		</div>
 
-		<el-dialog v-if="dialogAdd" :title="equipmentInfo.deviceId ? '编辑' : '新增'" :visible.sync="dialogAdd" width="60%">
+		<el-dialog v-if="dialogAdd" :title="equipmentInfo.hostQRCode ? '编辑' : '新增'" :visible.sync="dialogAdd" width="60%">
 			<dialogAdd :show.sync="dialogAdd" @refreshData="refreshData" :equipmentInfo="equipmentInfo">
 			</dialogAdd>
 		</el-dialog>
@@ -61,8 +69,12 @@
 
 		<el-dialog v-if="uploadAndDownload" title="上传与下载" :visible.sync="uploadAndDownload" width="60%">
 			<div class="clearfix mt10 mb10 pl30">
-				<el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 50%">
-					<el-option v-for="item in this.$constants.equType" :key="item.value" :label="item.name" :value="item.value">
+				<el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 200px" @change="changeEqu">
+					<el-option v-for="item in hostList" :key="item.value" :label="item.name" :value="item.value">
+					</el-option>
+				</el-select>
+                <el-select v-model="equipmentConfigerCode" placeholder="请选择" class="fl mr10" size="small" style="width: 200px">
+					<el-option v-for="item in companyList" :key="item.value" :label="item.name" :value="item.value">
 					</el-option>
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
@@ -107,9 +119,11 @@
 				importingShowLoading: false,
                 uploadAndDownload: false,
                 uploadType: 'nbSmoke',
+                equipmentConfigerCode: '',
                 equList: [],
 				queryParams: {
-                    name: '',
+                    insUserId: '',
+                    hostOnline: '',
 					pageSize: 10,
 					pageNumber: 1,
 				},
@@ -124,17 +138,17 @@
 					}
 				},
 				tHead: [{
-						prop: 'deviceQRCode',
+						prop: 'hostQRCode',
 						label: '主机编号',
 						width: ''
 					},
 					{
-						prop: 'deviceName',
+						prop: 'hostName',
 						label: '主机名称',
 						width: ''
 					},
                     {
-						prop: 'deviceOnline',
+						prop: 'hostOnline',
 						label: '状态',
 						width: '',
                         formatter: (row, column, cellValue) => {
@@ -173,7 +187,7 @@
 						}
 					},
 					{
-						prop: 'districtName',
+						prop: 'addHostUserName',
 						label: '创建者',
 						width: '',
 					},
@@ -184,7 +198,9 @@
 					},
 				],
 				tBody: [],
-				equipmentInfo: {}
+                equipmentInfo: {},
+                hostList: [],
+                companyList: []
 			}
 		},
 		watch: {},
@@ -199,7 +215,8 @@
 		created() {},
 		mounted() {
 			this.token = jsGetCookie('_TOKEN_');
-			this.queryEquipmentList();
+            this.queryEquipmentList();
+            this.queryHostType();
 		},
 		methods: {
 			onQuery() {
@@ -209,7 +226,19 @@
 
 			addNew() {
 				this.dialogAdd = true;
-			},
+            },
+            async queryHostType(){
+				const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
+                    note: '主机'
+                });
+                this.hostList = response.data;
+            },
+            async changeEqu(){
+                const response = await this.$http.get(this.$equApi.getEquipmentConfiger,{
+                    miniTypeCode: miniTypeCode
+                });
+                this.companyList = response.data;
+            },
 			async deleteEquipment() {
 				let selectArr = [];
 				if (this.multipleSelection.length <= 0) {
@@ -219,7 +248,7 @@
 						selectArr.push(item.deviceId);
 					});
 				}
-				const response = await this.$http.post(this.$equApi.deleteEquipment, selectArr);
+				const response = await this.$http.post(this.$equApi.hostDelete, selectArr);
 
 				if (response.result == "SUCCESS") {
 					this.$message({
@@ -279,7 +308,7 @@
 			},
 			async queryEquipmentList() {
 				const response = await this.$http.get(this.$equApi.hostList, this.queryParams);
-				this.tBody = response.data.equipmentList;
+				this.tBody = response.data.hostList;
 				this.total = parseInt(response.data.equipmentCount);
 				// this.queryParams.pageNumber = response.data.pageNumber;
 			},
@@ -294,9 +323,6 @@
 				this.onQuery();
 			},
 			async downloadEquTemplate() {
-				// const response = await this.$http.get(this.$equApi.downloadTemplate, {
-				// 	deviceName: this.uploadType
-				// });
 				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceName=' + this.uploadType)
 			}
 		}
