@@ -39,7 +39,7 @@
 					id: this.roleInfo.roleId,
 					name: this.roleInfo.name,
 					permissoinItemIds: [],
-					type: 'USER'
+					type: this.roleInfo.type
 				},
 				permissionList: [],
 				defaultProps: {

@@ -12,13 +12,13 @@
             </el-form-item>
             <el-form-item label="主机类型:">
                 <el-select v-model="form.hostType" placeholder="请选择" class="input-search" size="small">
-					<el-option v-for="item in hostList" :key="item.value" :label="item.name" :value="item.value">
+					<el-option v-for="item in hostList" :key="item.code" :label="item.name" :value="item.code">
 					</el-option>
 				</el-select>
             </el-form-item>
             <el-form-item label="主机小类型:">
                 <el-select v-model="form.hostTypeMini" placeholder="请选择" class="input-search" size="small">
-					<el-option v-for="item in miniTypeList" :key="item.value" :label="item.name" :value="item.value">
+					<el-option v-for="item in miniTypeList" :key="item.code" :label="item.name" :value="item.code">
 					</el-option>
 				</el-select>
             </el-form-item>
@@ -157,6 +157,7 @@ export default {
     },
     mounted(){
         this.queryHostType();
+        this.queryMiniType();
     },
     methods:{
         async queryHostType(){

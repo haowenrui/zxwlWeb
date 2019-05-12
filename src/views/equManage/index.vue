@@ -61,20 +61,20 @@
 
 		<el-dialog v-if="uploadAndDownload" title="上传与下载" :visible.sync="uploadAndDownload" width="60%">
 			<div class="clearfix mt10 mb10 pl30">
-				<el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 200px" @change="changeEqu">
-					<el-option v-for="item in hostList" :key="item.value" :label="item.name" :value="item.value">
+				<el-select v-model="uploadForm.deviceName" placeholder="请选择" class="fl mr10" size="small" style="width: 200px" @change="changeEqu">
+					<el-option v-for="item in hostList" :key="item.code" :label="item.name" :value="item.code">
 					</el-option>
 				</el-select>
-                <el-select v-model="uploadType" placeholder="请选择" class="fl mr10" size="small" style="width: 200px">
+                <el-select v-model="uploadForm.equipmentConfigerCode" placeholder="请选择" class="fl mr10" size="small" style="width: 200px">
 					<el-option v-for="item in companyList" :key="item.value" :label="item.name" :value="item.value">
 					</el-option>
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
                 </el-button>
-                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}" :data="{deviceName: uploadType}"
+                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}" :data="uploadForm"
                 :on-success="uploadSuccess()" :on-error="uploadFailure" :before-upload="beforeUpload"
                 :disabled="importingShowLoading" :show-file-list="false">
-                    <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入设备
+                    <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入主机
                     </el-button>
                 </el-upload>
 			</div>
@@ -112,6 +112,11 @@
                 uploadAndDownload: false,
                 uploadType: 'nbSmoke',
                 equList: [],
+                uploadForm: {
+                    deviceName: '',
+                    equipmentConfigerCode: ''
+                },
+                selectHostName: '',
 				queryParams: {
                     name: '',
 					pageSize: 10,
@@ -205,27 +210,39 @@
 		created() {},
 		mounted() {
 			this.token = jsGetCookie('_TOKEN_');
-			this.queryEquipmentList();
+            this.queryEquipmentList();
+            this.queryHostType();
 		},
 		methods: {
-            async queryHostType(){
-				const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
-                    note: '主机'
-                });
-                this.hostList = response.data;
-            },
-            async changeEqu(){
-                const response = await this.$http.get(this.$equApi.getEquipmentConfiger,{
-                    miniTypeCode: miniTypeCode
-                });
-                this.companyList = response.data;
-            },
 			onQuery() {
 				this.queryParams.pageNumber = 1;
 				this.queryEquipmentList();
-			},
+            },
+            
+            async queryHostType(){
+				const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
+                    note: '无线设备'
+                });
+                this.hostList = response.data;
+                this.uploadForm.deviceName = response.data[0].code;
+                this.selectHostName = response.data[0].name;
+                this.changeEqu();
+            },
+            async changeEqu(){
+                let _self = this;
+                this.hostList.forEach(item => {
+                    if(item.code == _self.uploadForm.deviceName){
+                        _self.selectHostName = item.name;
+                    }
+                });
+                const response = await this.$http.get(this.$equApi.getEquipmentConfiger,{
+                    miniTypeCode: this.uploadForm.deviceName
+                });
+                this.companyList = response.data;
+            },
 
 			addNew() {
+                this.equipmentInfo = {};
 				this.dialogAdd = true;
 			},
 			async deleteEquipment() {
@@ -320,7 +337,7 @@
 				// const response = await this.$http.get(this.$equApi.downloadTemplate, {
 				// 	deviceName: this.uploadType
 				// });
-				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceName=' + this.uploadType)
+				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceName=' + this.selectHostName)
 			}
 		}
 	}

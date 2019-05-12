@@ -10,6 +10,18 @@
             <el-form-item label="通信编号:">
                 <el-input v-model.trim="form.letterCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
+            <el-form-item label="主机类型:">
+                <el-select v-model="form.hostType" placeholder="请选择" class="input-search" size="small">
+					<el-option v-for="item in hostList" :key="item.code" :label="item.name" :value="item.code">
+					</el-option>
+				</el-select>
+            </el-form-item>
+            <el-form-item label="主机小类型:">
+                <el-select v-model="form.hostTypeMini" placeholder="请选择" class="input-search" size="small">
+					<el-option v-for="item in miniTypeList" :key="item.code" :label="item.name" :value="item.code">
+					</el-option>
+				</el-select>
+            </el-form-item>
             <el-form-item label="生产商:">
                 <el-input v-model.trim="form.proComName" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
@@ -66,6 +78,8 @@ export default {
                 deviceId: this.equipmentInfo.equipmentInfo,
                 deviceQRCode: '',
                 deviceName: '',
+                hostType: '',
+                hostTypeMini: '',
                 letterCode: '',
                 proComName: '',
                 proComCode: '',
@@ -79,7 +93,9 @@ export default {
                 insFrequency: '',
                 overTime: '',
                 fireFacility: ''
-            }
+            },
+            hostList: [],
+            miniTypeList: []
         }
     },
     watch:{
@@ -92,8 +108,24 @@ export default {
         }
     },
     mounted(){
+        this.queryHostType();
+        this.queryMiniType();
     },
     methods:{
+        async queryHostType(){
+            const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
+                note: '主机'
+            });
+            this.hostList = response.data;
+        },
+        async queryMiniType(){
+            const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
+                note: '',
+                parent_code: '5',
+                type: '设备类型'
+            });
+            this.miniTypeList = response.data;
+        },
         cancel() {
             this.$emit("update:show", false);
         },
