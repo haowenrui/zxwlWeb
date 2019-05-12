@@ -108,7 +108,7 @@
 
                     this.$router.replace({
                         // path: '/home'
-                        path: '/roleManage'
+                        path: '/equipmentManage'
                     });
                 }else{
                     this.loading = false;

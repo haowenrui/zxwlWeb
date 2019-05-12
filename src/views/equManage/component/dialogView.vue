@@ -115,7 +115,7 @@ import ECharts from 'echarts';
             },
             async queryEquTypeList(){
                 const response = await this.$http.get(this.$equApi.findEquipmentModleItem, {
-					typeCode: this.equipmentInfo.deviceTypeMini
+					equipmentConfigerCode: this.equipmentInfo.equipmentConfigerCode
                 });
                 this.typeList = response.data;
             },
