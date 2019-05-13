@@ -20,7 +20,7 @@
                 <span>{{form.insLocation}}</span>
             </el-form-item>
             <el-form-item label="安装日期:">
-                <span>{{form.insDate}}</span>
+                <span>{{form.insDate | dateFormatFilter('yyyy-MM-dd hh:mm:ss')}}</span>
             </el-form-item>
             <el-form-item label="CCID:">
                 <span>{{form.ccid}}</span>
@@ -59,7 +59,7 @@
                 <span>{{form.insFrequency}}</span>
             </el-form-item>
             <el-form-item label="过保时间:">
-                <span>{{form.overTime}}</span>
+                <span>{{form.overTime | dateFormatFilter('yyyy-MM-dd hh:mm:ss')}}</span>
             </el-form-item>
             <el-form-item label="消防设施:">
                 <span>{{form.fireFacility}}</span>
@@ -133,7 +133,7 @@ import ECharts from 'echarts';
 				const response = await this.$http.get(this.$equApi.findByHostId, {
 					hostId: this.equipmentInfo.hostId
 				});
-				this.form = response.data.host;
+				this.form = response.data;
             },
             async queryEquTypeList(){
                 const response = await this.$http.get(this.$equApi.findEquipmentModleItem, {

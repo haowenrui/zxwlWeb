@@ -103,6 +103,7 @@
 </template>
 
 <script>
+import { dateFormatFilter } from '@/filters/index';
 export default {
     components:{
     },
@@ -192,9 +193,12 @@ export default {
             });
         },
         async queryEquipmentInfo(){
-            const response = await this.$http.get(this.$equApi.queryEquipmentInfo,{
+            const response = await this.$http.get(this.$equApi.findByHostId,{
                 hostId: this.equipmentInfo.hostId
             }); 
+            response.data.createTime = dateFormatFilter(response.data.createTime,'yyyy-MM-dd hh:mm:ss')
+            response.data.insDate = dateFormatFilter(response.data.insDate,'yyyy-MM-dd hh:mm:ss')
+            response.data.overTime = dateFormatFilter(response.data.overTime,'yyyy-MM-dd hh:mm:ss')
             this.form = response.data;
         },
         async _addAndModifyEquipment(){
