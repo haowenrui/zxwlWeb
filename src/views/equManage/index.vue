@@ -66,7 +66,7 @@
 					</el-option>
 				</el-select>
                 <el-select v-model="uploadForm.equipmentConfigerCode" placeholder="请选择" class="fl mr10" size="small" style="width: 200px">
-					<el-option v-for="item in companyList" :key="item.value" :label="item.name" :value="item.value">
+					<el-option v-for="item in companyList" :key="item.id" :label="item.des" :value="item.code">
 					</el-option>
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
@@ -336,8 +336,9 @@
 			async downloadEquTemplate() {
 				// const response = await this.$http.get(this.$equApi.downloadTemplate, {
 				// 	deviceName: this.uploadType
-				// });
-				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceName=' + this.selectHostName)
+                // });
+                
+				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceMiniTypeCode=' + this.uploadForm.deviceName)
 			}
 		}
 	}

@@ -44,9 +44,11 @@
                                 <li v-for="(item,index) in alarmList" :key="index">
                                     <div>
                                         <span>{{item.deviceName}}</span>
-                                        <span class="color-red">代处理</span>
-                                        <span class="ml10 color-orange" style="cursor: pointer" @click="resolve(item)">处理</span>
+                                        <span class="ml10 color-red" style="cursor: pointer" @click="resolve(item)">处理</span>
                                         <span class="ml10 color-orange" style="cursor: pointer" @click="transmit(item)">转发</span>
+                                    </div>
+                                    <div>
+                                        报警时间:{{item.alarmDate | dateFormatFilter('yyyy-MM-dd hh:mm:ss')}}
                                     </div>
                                     <div>
                                         {{item.companyName}}
@@ -758,7 +760,7 @@
         position: absolute;
         top: 20px;
         left: 0px;
-        width: 180px;
+        width: 210px;
         height: 330px;
         overflow: hidden;
         
@@ -769,6 +771,7 @@
             border: 1px solid #bba225;
             width: 100%;
             height: 94px;
+            overflow: hidden;
         }
     }
 

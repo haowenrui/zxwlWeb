@@ -20,9 +20,9 @@
 				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增主机</el-button>
 				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除主机
 				</el-button>
-                <el-button size="small" class="button-query fr mr10" type="success" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">导入主机
+                <el-button size="small" class="button-query fr mr10" type="success" @click="openImportHost" v-if="this.$permissionShow('equipment_import')">导入主机
 					</el-button>
-				<el-button class="button-query fr mr10" type="primary" size="small" @click="uploadAndDownload = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">下载模板
+				<el-button class="button-query fr mr10" type="primary" size="small" @click="openImportHost = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">下载模板
 				</el-button>
 			</div>
 			<el-table :data="tBody" border style="width: 100%" size="small" @selection-change="handleSelectionChange">
@@ -74,7 +74,7 @@
 					</el-option>
 				</el-select>
                 <el-select v-model="uploadForm.equipmentConfigerCode" placeholder="请选择" class="fl mr10" size="small" style="width: 200px">
-					<el-option v-for="item in companyList" :key="item.value" :label="item.name" :value="item.value">
+					<el-option v-for="item in companyList" :key="item.id" :label="item.des" :value="item.code">
 					</el-option>
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
@@ -93,13 +93,17 @@
 
         <el-dialog v-if="uploadAndDownloadEqu" title="上传与下载" :visible.sync="uploadAndDownloadEqu" width="60%">
 			<div class="clearfix mt10 mb10 pl30">
+                <el-select v-model="uploadForm.deviceName" placeholder="请选择" class="fl mr10" size="small" style="width: 200px" @change="changeEqu">
+					<el-option v-for="item in hostList" :key="item.code" :label="item.name" :value="item.code">
+					</el-option>
+				</el-select>
                 <el-select v-model="uploadForm.equipmentConfigerCode" placeholder="请选择" class="fl mr10" size="small" style="width: 200px">
-					<el-option v-for="item in companyList" :key="item.value" :label="item.name" :value="item.value">
+					<el-option v-for="item in companyList" :key="item.id" :label="item.des" :value="item.code">
 					</el-option>
 				</el-select>
                 <el-button size="small" class="button-query fl mr10" @click="downloadEquTemplate" :loading="importingShowLoading" type="primary">下载模板
                 </el-button>
-                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}" :data="uploadForm"
+                <el-upload class="button-query fl" :action='templateURL' :headers="{'X-Access-Token': token}" :data="{equipmentConfigerCode: this.uploadForm.equipmentConfigerCode,hostId: this.equipmentInfo.hostId, hostCode: this.equipmentInfo.hostQRCode}"
                 :on-success="uploadSuccess()" :on-error="uploadFailure" :before-upload="beforeUpload"
                 :disabled="importingShowLoading" :show-file-list="false">
                     <el-button size="small" class="button-query" :loading="importingShowLoading" type="success">导入设备
@@ -140,7 +144,6 @@
                 uploadAndDownloadEqu: false,
                 uploadAndDownload: false,
                 uploadType: 'nbSmoke',
-                equipmentConfigerCode: '',
                 equList: [],
 				queryParams: {
                     insUserId: '',
@@ -242,7 +245,7 @@
 		mounted() {
 			this.token = jsGetCookie('_TOKEN_');
             this.queryEquipmentList();
-            this.queryHostType();
+            // this.queryHostType();
 		},
 		methods: {
 			onQuery() {
@@ -253,6 +256,9 @@
 			addNew() {
                 this.equipmentInfo = {};
 				this.dialogAdd = true;
+            },
+            openImportHost(){
+                this.queryHostType();
             },
             async queryHostType(){
 				const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
@@ -320,6 +326,7 @@
 							type: "success"
                         });
                         this.uploadAndDownload = false;
+                        this.uploadAndDownloadEqu = false;
                         this.refreshData();
 					} else {
 						this.$message({
@@ -352,10 +359,21 @@
 				this.equipmentInfo = info;
 				this.dialogAdd = true;
             },
+
+            async queryHostTypeMini(){
+				const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
+                    parentCode: this.equipmentInfo.hostTypeMini,
+                    type: '无线设备',
+                });
+                this.hostList = response.data;
+                this.uploadForm.deviceName = response.data[0].code;
+                this.selectHostName = response.data[0].name;
+                this.changeEqu();
+            },
             _importEqu(info){
                 this.equipmentInfo = info;
                 this.uploadForm.deviceName = info.hostTypeMini;
-                this.changeEqu();
+                this.queryHostTypeMini();
 				this.uploadAndDownloadEqu = true;
             },
 			handleSelectionChange(val) {
@@ -365,7 +383,7 @@
 				this.onQuery();
 			},
 			async downloadEquTemplate() {
-				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceName=' + this.selectHostName)
+				downloadFile('http://39.98.173.65:9001/equipment/downloadTemplatezxwl?deviceMiniTypeCode=' + this.uploadForm.deviceName)
 			}
 		}
 	}

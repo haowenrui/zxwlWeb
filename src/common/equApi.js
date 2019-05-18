@@ -20,6 +20,7 @@ let equApi = {
     findEquipmentModleItem: '/equipment/findEquipmentModleItem',
 
     alarmList: '/alarm/list',
+    alarmTypes: '/alarm/alarmTypes',
     alarmStatistics: '/statistics/alarmType',
     deviceTypeStatistics: '/statistics/deviceType',
     devicesStatistics:'/statistics/devices',

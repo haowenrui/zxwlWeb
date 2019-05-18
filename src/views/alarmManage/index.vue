@@ -13,7 +13,7 @@
             <el-form-item label="类型:" prop="type">
                 <el-select placeholder="请选择" class="select-method" v-model="queryParams.alarmType">
                     <el-option key="" label="全部" value=""></el-option>
-                    <el-option v-for="item in this.$constants.alarmTypeList" :label="item.name" :value="item.value" :key="item.value"></el-option>
+                    <el-option v-for="item in alarmTypeList" :label="item.name" :value="item.value" :key="item.value"></el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -72,6 +72,7 @@ export default {
                 deviceName: '',
                 alarmType: ''
             },
+            alarmTypeList: [],
             total: 0,
             pageSize: 10,
             currentPage: 1,
@@ -109,7 +110,22 @@ export default {
                     label: '类型',
                     width: '',
                     formatter: (row, column,cellValue) => {
-                        return alarmType(cellValue);
+                        let currentAlarmType = this.alarmTypeList.find(item => {
+                            return item.value === cellValue;
+                        })
+                        return currentAlarmType.name;
+                    }
+                },
+                {
+                    prop: 'alarmValue',
+                    label: '报警值',
+                    width: '',
+                    formatter: (row, column,cellValue) => {
+                        let alarmStr = '';
+                        if(row.alarmValue && row.alarmValue != null){
+                            alarmStr = row.itemName + '-' + row.alarmValue + row.itemUnit
+                        }
+                        return alarmStr;
                     }
                 },
                 {
@@ -134,6 +150,7 @@ export default {
     },
     mounted(){
         this.getAlarmList();
+        this.getAlarmTypeList();
     },
     methods:{
         onQuery(){
@@ -151,6 +168,11 @@ export default {
             const res = await this.$http.post(this.$equApi.alarmList,this.queryParams);
             this.alarmHistioryList = res.data.content;
             this.total = res.data.totalElements;
+        },
+        async getAlarmTypeList(){
+            let self = this;
+            const res = await this.$http.get(this.$equApi.alarmTypes);
+            this.alarmTypeList = res.data;
         }
         
     }
