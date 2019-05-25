@@ -124,6 +124,16 @@ let constants = {
             value: 'offline',
             name: '离线报警'
         },
+    ],
+    equStateList: [
+        {
+            code: 'online',
+            name: '在线'
+        },
+        {
+            code: 'offline',
+            name: '离线'
+        },
     ]
 
 

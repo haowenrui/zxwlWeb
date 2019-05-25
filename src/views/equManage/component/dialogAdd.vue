@@ -1,37 +1,43 @@
 <template>
     <div>
-        <el-form ref="form" :model="form" :inline="true" label-width="100px" size="mini">
-            <el-form-item label="设备名称:">
+        <el-form ref="form" :model="form" :inline="true" label-width="100px" size="small">
+            <el-form-item label="设备名称:" required :show-message="false">
                 <el-input v-model.trim="form.deviceName" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="设备编码:">
+            <el-form-item label="设备编码:" required :show-message="false">
                 <el-input v-model.trim="form.deviceQRCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="通信编号:">
+            <!-- <el-form-item label="通信编号:">
                 <el-input v-model.trim="form.letterCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
-            </el-form-item>
-            <el-form-item label="主机类型:">
-                <el-select v-model="form.hostType" placeholder="请选择" class="input-search" size="small">
+            </el-form-item> -->
+            <el-form-item label="设备类型:" required :show-message="false">
+                <el-select v-model="form.deviceType" placeholder="请选择" class="input-search" size="small" @change="deviceTypeChange">
 					<el-option v-for="item in hostList" :key="item.code" :label="item.name" :value="item.code">
 					</el-option>
 				</el-select>
             </el-form-item>
-            <el-form-item label="主机小类型:">
-                <el-select v-model="form.hostTypeMini" placeholder="请选择" class="input-search" size="small">
+            <el-form-item label="设备小类型:" required :show-message="false">
+                <el-select v-model="form.deviceTypeMini" placeholder="请选择" class="input-search" size="small">
 					<el-option v-for="item in miniTypeList" :key="item.code" :label="item.name" :value="item.code">
+					</el-option>
+				</el-select>
+            </el-form-item>
+            <el-form-item label="所属主机:">
+                <el-select v-model="form.hostId" placeholder="请选择" class="input-search" size="small">
+					<el-option v-for="item in hostEquList" :key="item.hostId" :label="item.hostName + '-' + item.hostQRCode" :value="item.hostId">
 					</el-option>
 				</el-select>
             </el-form-item>
             <el-form-item label="生产商:">
                 <el-input v-model.trim="form.proComName" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
-            <el-form-item label="厂家编码:">
+            <!-- <el-form-item label="厂家编码:">
                 <el-input v-model.trim="form.proComCode" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="产品类型:">
                 <el-input v-model.trim="form.proType" clearable class="input-search" size="small" placeholder="请输入"></el-input>
-            </el-form-item>
-            <el-form-item label="最小值:">
+            </el-form-item> -->
+            <!-- <el-form-item label="最小值:">
                 <el-input v-model.trim="form.minValue" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="最大值:">
@@ -45,7 +51,7 @@
             </el-form-item>
             <el-form-item label="是否模拟:">
                 <el-input v-model.trim="form.isSimulate" clearable class="input-search" size="small" placeholder="请输入"></el-input>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="版本号:">
                 <el-input v-model.trim="form.version" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
@@ -53,11 +59,12 @@
                 <el-input v-model.trim="form.insFrequency" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="过保时间:">
-                <el-input v-model.trim="form.overTime" clearable class="input-search" size="small" placeholder="请输入"></el-input>
+                <el-date-picker v-model="form.overTime" type="date" class="input-search" placeholder="选择日期">
+                </el-date-picker>
             </el-form-item>
-            <el-form-item label="消防设施:">
+            <!-- <el-form-item label="消防设施:">
                 <el-input v-model.trim="form.fireFacility" clearable class="input-search" size="small" placeholder="请输入"></el-input>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
         <div class="dialog-footer text-right pb20">
 			<el-button size="small" @click="cancel">取 消</el-button>
@@ -78,8 +85,11 @@ export default {
                 deviceId: this.equipmentInfo.equipmentInfo,
                 deviceQRCode: '',
                 deviceName: '',
+                hostId: '',
                 hostType: '',
                 hostTypeMini: '',
+                deviceType: '',
+                deviceTypeMini: '',
                 letterCode: '',
                 proComName: '',
                 proComCode: '',
@@ -95,7 +105,8 @@ export default {
                 fireFacility: ''
             },
             hostList: [],
-            miniTypeList: []
+            miniTypeList: [],
+            hostEquList: []
         }
     },
     watch:{
@@ -109,22 +120,37 @@ export default {
     },
     mounted(){
         this.queryHostType();
-        this.queryMiniType();
+        this.queryEquipmentList();
+        // this.queryMiniType();
     },
     methods:{
         async queryHostType(){
             const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
-                note: '主机'
+                note: '',
+                parentCode: '5',
+                type: '设备类型'
             });
             this.hostList = response.data;
         },
-        async queryMiniType(){
+        async queryMiniType(parent_code){
             const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
-                note: '',
-                parent_code: '5',
-                type: '设备类型'
+                parentCode: parent_code,
+                note: '无线设备,主机终端',
+                type: '设备小类型'
             });
             this.miniTypeList = response.data;
+        },
+
+        async queryEquipmentList() {
+            const response = await this.$http.get(this.$equApi.hostList, {
+                pageSize: 10000000,
+                pageNumber: 1
+            });
+            this.hostEquList = response.data.hostList;
+        },
+        deviceTypeChange(){
+            this.form.deviceTypeMini = '';
+            this.queryMiniType(this.form.deviceType);
         },
         cancel() {
             this.$emit("update:show", false);

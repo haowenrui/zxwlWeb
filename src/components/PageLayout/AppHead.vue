@@ -180,7 +180,7 @@
                     jsDeleteCookie('_CURRENT_COMPANY_AREA_');
                     jsDeleteCookie('_CURRENT_USER_ID_');
                     jsDeleteCookie('_CURRENT_USER_NAME_');
-					document.title = 'zxwl';
+					document.title = '正消物联';
 					this.$router.push({
 						path: 'login'
 					})

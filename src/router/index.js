@@ -56,7 +56,7 @@ export default new Router({
                 {
                     path: "/alarmList",
                     component: AlarmList,
-                    name: "报警历史"
+                    name: "报警列表"
                 }
             ]
         },
@@ -126,7 +126,7 @@ export default new Router({
                 {
                     path: "/indexManage",
                     component: IndexManage,
-                    name: "指标管理"
+                    name: "指标配置"
                 }
             ]
         },

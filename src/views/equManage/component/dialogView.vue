@@ -7,13 +7,19 @@
 			<el-form-item label="设备编码:">
 				<span>{{form.deviceQRCode}}</span>
 			</el-form-item>
-			<el-form-item label="通信编号:">
+			<!-- <el-form-item label="通信编号:">
 				<span>{{form.letterCode}}</span>
+			</el-form-item> -->
+            <el-form-item label="安装人员:">
+				<span>{{form.insUserName}}</span>
+			</el-form-item>
+            <el-form-item label="安装人员电话:">
+				<span>{{form.insUserTel}}</span>
 			</el-form-item>
 			<el-form-item label="生产商:">
 				<span>{{form.proComName}}</span>
 			</el-form-item>
-			<el-form-item label="厂家编码:">
+			<!-- <el-form-item label="厂家编码:">
 				<span>{{form.proComCode}}</span>
 			</el-form-item>
 			<el-form-item label="产品类型:">
@@ -33,7 +39,7 @@
 			</el-form-item>
 			<el-form-item label="是否模拟:">
 				<span>{{form.isSimulate}}</span>
-			</el-form-item>
+			</el-form-item> -->
 			<el-form-item label="版本号:">
 				<span>{{form.version}}</span>
 			</el-form-item>
@@ -43,9 +49,9 @@
 			<el-form-item label="过保时间:">
 				<span>{{form.overTime}}</span>
 			</el-form-item>
-			<el-form-item label="消防设施:">
+			<!-- <el-form-item label="消防设施:">
 				<span>{{form.fireFacility}}</span>
-			</el-form-item>
+			</el-form-item> -->
 		</el-form>
 		<div>
 			<div class="charts-head text-right">

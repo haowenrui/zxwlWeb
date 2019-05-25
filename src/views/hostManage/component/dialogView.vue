@@ -8,12 +8,18 @@
                 <span>{{form.hostName}}</span>
             </el-form-item>
             <el-form-item label="主机类型:">
-                <span>{{form.hostType}}</span>
+                <span>{{form.hostTypeName}}</span>
             </el-form-item>
             <el-form-item label="主机小类型:">
-                <span>{{form.hostTypeMini}}</span>
+                <span>{{form.hostTypeMiniName}}</span>
             </el-form-item>
-            <el-form-item label="安装人id:">
+             <el-form-item label="安装人员:">
+				<span>{{form.insUserName}}</span>
+			</el-form-item>
+            <el-form-item label="安装人员电话:">
+				<span>{{form.insUserTel}}</span>
+			</el-form-item>
+            <!-- <el-form-item label="安装人id:">
                 <span>{{form.insUserId}}</span>
             </el-form-item>
             <el-form-item label="安装位置:">
@@ -36,11 +42,11 @@
             </el-form-item>
             <el-form-item label="通信协议:">
                 <span>{{form.letterAgreement}}</span>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="版本号:">
                 <span>{{form.version}}</span>
             </el-form-item>
-            <el-form-item label="厂家编码:">
+            <!-- <el-form-item label="厂家编码:">
                 <span>{{form.proComCode}}</span>
             </el-form-item>
             <el-form-item label="生产商:">
@@ -51,7 +57,7 @@
             </el-form-item>
             <el-form-item label="所属企业标识号:">
                 <span>{{form.opeCompany}}</span>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="所属服务器标识号:">
                 <span>{{form.opeService}}</span>
             </el-form-item>
@@ -61,7 +67,7 @@
             <el-form-item label="过保时间:">
                 <span>{{form.overTime | dateFormatFilter('yyyy-MM-dd hh:mm:ss')}}</span>
             </el-form-item>
-            <el-form-item label="消防设施:">
+            <!-- <el-form-item label="消防设施:">
                 <span>{{form.fireFacility}}</span>
             </el-form-item>
             <el-form-item label="片区id:">
@@ -84,7 +90,7 @@
             </el-form-item>
             <el-form-item label="设备配置编码:">
                 <span>{{form.equipmentConfigerCode}}</span>
-            </el-form-item>
+            </el-form-item> -->
 		</el-form>
 		<div class="dialog-footer text-right pb20">
 			<el-button type="primary" @click="cancel" size="small">关 闭</el-button>

@@ -6,8 +6,11 @@
 				</el-input>
 			</el-form-item>
             <el-form-item label="在线状态:" prop="name">
-				<el-input v-model.trim="queryParams.hostOnline" clearable class="input-search" size="small" placeholder="请输入">
-				</el-input>
+                <el-select v-model="queryParams.hostOnline" placeholder="请选择" class="input-search" size="small">
+                    <el-option label="全部" value=""></el-option>
+					<el-option v-for="item in this.$constants.equStateList" :key="item.code" :label="item.name" :value="item.code">
+					</el-option>
+				</el-select>
 			</el-form-item>
 			<el-form-item>
 				<el-button class="button-query" type="primary" :loading="queryingShowLoading" @click="onQuery">查询
@@ -18,6 +21,7 @@
 		<div class="use-table">
 			<div class="clear-fix mb10">
 				<el-button class="button-query fr" type="primary" @click="addNew" size="small" v-if="this.$permissionShow('equipment_create')">新增主机</el-button>
+				<el-button class="fr mr10" type="primary" @click="transfer" size="small" :disabled="multipleSelection.length == 0" v-if="this.$permissionShow('equipment_create')">变更安装人员</el-button>
 				<el-button class="button-query fr mr10" type="warning" @click="deleteEquipment" size="small" v-if="this.$permissionShow('equipment_delete')">删除主机
 				</el-button>
                 <el-button size="small" class="button-query fr mr10" type="success" @click="openImportHost" v-if="this.$permissionShow('equipment_import')">导入主机
@@ -115,6 +119,26 @@
 			</span>
 		</el-dialog>
 
+        <el-dialog v-if="multipleChange" title="批量迁移" :visible.sync="multipleChange" width="550px">
+            <div class="dialog-cont">
+                <div class="select-agent-list clearfix">
+                    <div style="display: inline-block">
+                        安装人员：
+                    </div>
+                    <div style="display: inline-block">
+                        <el-select v-model="selectInsuser" placeholder="请选择安装人员" filterable clearable size="small">
+                            <el-option v-for="(item,index) in insUserList" :key="index" :label="item.name" :value="item.companyUserId">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </div>
+            </div>
+            <div class="dialog-footer text-right pb20">
+                <el-button size="small" @click="cancleMultipleChange">取 消</el-button>
+                <el-button type="primary" @click="submitMultipleChange" size="small">确 定</el-button>
+            </div>
+        </el-dialog>
+
 	</div>
 </template>
 
@@ -139,11 +163,13 @@
 			return {
                 dialogAdd: false,
                 dialogView: false,
+                multipleChange: false,
 				queryingShowLoading: false,
                 importingShowLoading: false,
                 uploadAndDownloadEqu: false,
                 uploadAndDownload: false,
                 uploadType: 'nbSmoke',
+                insUserList: [],
                 equList: [],
 				queryParams: {
                     insUserId: '',
@@ -198,8 +224,8 @@
 						width: ''
 					},
 					{
-						prop: 'proType',
-						label: '产品类型',
+						prop: 'insUserName',
+						label: '安装人员',
 						width: ''
 					},
 					{
@@ -220,16 +246,12 @@
 						label: '创建者',
 						width: '',
 					},
-					{
-						prop: 'merchantType',
-						label: '修改者',
-						width: '',
-					},
 				],
 				tBody: [],
                 equipmentInfo: {},
                 hostList: [],
-                companyList: []
+                companyList: [],
+                selectInsuser: ''
 			}
 		},
 		watch: {},
@@ -245,6 +267,7 @@
 		mounted() {
 			this.token = jsGetCookie('_TOKEN_');
             this.queryEquipmentList();
+            this.queryUserList();
             // this.queryHostType();
 		},
 		methods: {
@@ -378,7 +401,65 @@
             },
 			handleSelectionChange(val) {
 				this.multipleSelection = val;
-			},
+            },
+
+            async queryUserList(){
+                const response = await this.$http.post(this.$urlApi.getUserList,{
+                    type: 'INSTALLER',
+                    pageSize: 10000000,
+                    pageNumber: 1,
+                }); 
+                this.insUserList = response.data.content;
+            },
+            
+            transfer(){
+                if (this.multipleSelection.length > 0) {
+                    this.multipleChange = true;
+                } else {
+                    return;
+                }
+            },
+            
+            cancleMultipleChange() {
+                this.multipleChange = false;
+                this.selectInsuser = '';
+            },
+
+            async submitMultipleChange() {
+                let equNoList = [];
+                this.multipleSelection.forEach(item => {
+                    equNoList.push(item.hostId);
+                })
+                if (!this.selectInsuser) {
+                    this.$message({
+                        showClose: true,
+                        message: '请选择安装人员',
+                        type: "error"
+                    });
+                    return false;
+                }
+                const res = await this.$http.post(this.$equApi.changeEqupInsUser, {
+                    type: 'host',
+                    equipIds: equNoList,
+                    companyUserId: this.selectInsuser
+                });
+                this.multipleChange = false;
+                if (!res.status) {
+                    this.$message({
+                        showClose: true,
+                        message: "操作成功",
+                        type: "success"
+                    });
+                    this.onQuery();
+                } else {
+                    this.$message({
+                        showClose: true,
+                        message: res.message,
+                        type: "error"
+                    });
+                }
+                this.selectInsuser = '';
+            },
 			refreshData() {
 				this.onQuery();
 			},

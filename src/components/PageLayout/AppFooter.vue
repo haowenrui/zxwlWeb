@@ -27,7 +27,7 @@
 <template lang="html">
   <section class="layout-footer">
     <div class="footer-fixed">
-      <p class="company">zxwl</p>
+      <p class="company">正消物联</p>
       <p class="copyright">Copyright 2018</p>
     </div>
   </section>

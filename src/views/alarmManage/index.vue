@@ -32,23 +32,28 @@
                 <el-table-column align="center" v-for="item in tHead" :key="item.prop" :prop="item.prop" :label="item.label" :width="item.width"
                     :formatter="item.formatter">
                 </el-table-column>
-                <!-- <el-table-column align="center" label="操作" width="">
+                <el-table-column align="center" label="操作" width="">
                     <template slot-scope="scope">
-
-                        <el-tooltip effect="dark" content="查看" placement="bottom">
-                            <el-button type="text" @click="_checkSchoolInfo(scope.row)" class="iconfont icon-chakan"></el-button>
-                        </el-tooltip>
-                        <el-tooltip effect="dark" content="报警处理" placement="bottom">
-                            <el-button type="text" @click="_editSchoolInfo(scope.row)" class="iconfont icon-biji"></el-button>
-                        </el-tooltip>
-                        
+                        <el-button type="text" @click="transmit(scope.row)"> 转发</el-button>
+                        <el-button type="text" @click="resolve(scope.row)" >报警处理</el-button>
                     </template>
-                </el-table-column> -->
+                </el-table-column>
             </el-table>
             <el-pagination @current-change="handleCurrentChange" :current-page="queryParams.pageNumber" :page-size="queryParams.pageSize" layout="total, prev, pager, next, jumper"
                 :total="total" class="page" v-show="total > 0" :disabled="queryingShowLoading">
             </el-pagination>
         </div>
+
+
+        <el-dialog v-if="resolveAlarmVisible" title="报警处理" :visible.sync="resolveAlarmVisible" width="30%">
+			<resolveAlarm :show.sync="resolveAlarmVisible" :alrmInfo="alrmInfo" @closePopup="closePopup" @resolveAlarm="closePopup">
+			</resolveAlarm>
+		</el-dialog>
+
+        <el-dialog v-if="transmitAlarmVisible" title="报警转发" :visible.sync="transmitAlarmVisible" width="30%">
+			<transmitAlarm :show.sync="transmitAlarmVisible" :alrmInfo="alrmInfo" @closePopup="closePopup">
+			</transmitAlarm>
+		</el-dialog>
     </div>
 </template>
 
@@ -58,13 +63,21 @@ import {jsGetCookie} from '@/tools/utils';
 import env from '@/common/env';
 import { alarmStatus, alarmType } from '@/filters/index';
 
+import resolveAlarm from '../home/components/resolveAlarm.vue';
+import transmitAlarm from '../home/components/transmitAlarm.vue';
+
 export default {
     components:{
+        resolveAlarm,
+        transmitAlarm
     },
     props:[],
     data(){
         return {
+            resolveAlarmVisible: false,
+            transmitAlarmVisible: false,
             queryingShowLoading: false,
+            alrmInfo: {},
             queryParams: {
                 pageSize: 10,
                 pageNumber: 1,
@@ -173,7 +186,25 @@ export default {
             let self = this;
             const res = await this.$http.get(this.$equApi.alarmTypes);
             this.alarmTypeList = res.data;
-        }
+        },
+
+
+        resolve(info){
+            this.alrmInfo = info;
+            this.resolveAlarmVisible = true;
+        },
+
+        transmit(info){
+            this.alrmInfo = info;
+            this.transmitAlarmVisible = true;
+        },
+
+        closePopup(){
+            this.resolveAlarmVisible = false;
+            this.transmitAlarmVisible = false;
+            this.onQuery();
+        },
+
         
     }
 }

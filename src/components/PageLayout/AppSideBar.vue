@@ -94,11 +94,11 @@
 			}
 		},
 		created() {
-			document.title = 'zxwl—' + this.$route.name;
+			document.title = '正消物联-' + this.$route.name;
 		},
 		watch: {
 			$route() {
-				document.title = 'zxwl—' + this.$route.name;
+				document.title = '正消物联-' + this.$route.name;
 				this.defaultPath = this.$route.path;
 			},
 		},
