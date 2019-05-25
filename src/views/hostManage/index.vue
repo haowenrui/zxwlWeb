@@ -26,7 +26,7 @@
 				</el-button>
                 <el-button size="small" class="button-query fr mr10" type="success" @click="openImportHost" v-if="this.$permissionShow('equipment_import')">导入主机
 					</el-button>
-				<el-button class="button-query fr mr10" type="primary" size="small" @click="openImportHost = !uploadAndDownload" v-if="this.$permissionShow('equipment_import')">下载模板
+				<el-button class="button-query fr mr10" type="primary" size="small" @click="openImportHost" v-if="this.$permissionShow('equipment_import')">下载模板
 				</el-button>
 			</div>
 			<el-table :data="tBody" border style="width: 100%" size="small" @selection-change="handleSelectionChange">
@@ -281,6 +281,7 @@
 				this.dialogAdd = true;
             },
             openImportHost(){
+                this.uploadAndDownload = true;
                 this.queryHostType();
             },
             async queryHostType(){
@@ -386,7 +387,8 @@
             async queryHostTypeMini(){
 				const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
                     parentCode: this.equipmentInfo.hostTypeMini,
-                    type: '无线设备',
+                    note: '主机终端',
+                    type: '设备小类型'
                 });
                 this.hostList = response.data;
                 this.uploadForm.deviceName = response.data[0].code;
@@ -395,7 +397,7 @@
             },
             _importEqu(info){
                 this.equipmentInfo = info;
-                this.uploadForm.deviceName = info.hostTypeMini;
+                // this.uploadForm.deviceName = info.hostTypeMini;
                 this.queryHostTypeMini();
 				this.uploadAndDownloadEqu = true;
             },

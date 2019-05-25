@@ -110,7 +110,13 @@
 				});
 			},
 			async _addAndModifyUser() {
-				const response = await this.$http.post(this.$urlApi.addUser, this.form);
+                
+                let response = null;
+                if(!this.userInfo.userId){
+                    response = await this.$http.post(this.$urlApi.addUser,this.form); 
+                }else{
+                    response = await this.$http.post(this.$urlApi.editUser,this.form); 
+                }
 				if (!response.status) {
 					this.$emit("update:show", false);
 					this.$emit("refreshData");
