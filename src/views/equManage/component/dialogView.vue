@@ -10,6 +10,9 @@
 			<!-- <el-form-item label="通信编号:">
 				<span>{{form.letterCode}}</span>
 			</el-form-item> -->
+            <el-form-item label="新增时间:">
+				<span>{{form.createTime | dateFormatFilter('yyyy-MM-dd hh:mm:ss')}}</span>
+			</el-form-item>
             <el-form-item label="安装人员:">
 				<span>{{form.insUserName}}</span>
 			</el-form-item>
@@ -47,7 +50,7 @@
 				<span>{{form.insFrequency}}</span>
 			</el-form-item>
 			<el-form-item label="过保时间:">
-				<span>{{form.overTime}}</span>
+				<span>{{form.overTime | dateFormatFilter}}</span>
 			</el-form-item>
 			<!-- <el-form-item label="消防设施:">
 				<span>{{form.fireFacility}}</span>

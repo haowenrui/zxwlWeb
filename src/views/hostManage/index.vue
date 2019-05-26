@@ -311,7 +311,7 @@
 					return;
 				} else {
 					this.multipleSelection.forEach(item => {
-						selectArr.push(item.deviceId);
+						selectArr.push(item.hostId);
 					});
 				}
 				const response = await this.$http.post(this.$equApi.hostDelete, selectArr);

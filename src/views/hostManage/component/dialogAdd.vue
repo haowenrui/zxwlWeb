@@ -65,7 +65,7 @@
                 <el-input v-model.trim="form.insFrequency" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="过保时间:">
-                <el-date-picker v-model="form.overTime" type="date" class="input-search" placeholder="选择日期">
+                <el-date-picker v-model="form.overTime" format="yyyy-MM-dd" value-format="yyyy-MM-dd" type="date" class="input-search" placeholder="选择日期">
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="所属服务器标识号:">
@@ -159,7 +159,11 @@ export default {
     },
     mounted(){
         this.queryHostType();
-        this.queryMiniType();
+
+        if(this.equipmentInfo.hostId){
+            this.queryMiniType(this.equipmentInfo.hostType);
+        }
+        // this.queryMiniType();
     },
     methods:{
         async queryHostType(){
@@ -203,9 +207,9 @@ export default {
             const response = await this.$http.get(this.$equApi.findByHostId,{
                 hostId: this.equipmentInfo.hostId
             }); 
-            response.data.createTime = dateFormatFilter(response.data.createTime,'yyyy-MM-dd hh:mm:ss')
-            response.data.insDate = dateFormatFilter(response.data.insDate,'yyyy-MM-dd hh:mm:ss')
-            response.data.overTime = dateFormatFilter(response.data.overTime,'yyyy-MM-dd hh:mm:ss')
+            // response.data.createTime = dateFormatFilter(response.data.createTime,'yyyy-MM-dd hh:mm:ss')
+            // response.data.insDate = dateFormatFilter(response.data.insDate,'yyyy-MM-dd hh:mm:ss')
+            response.data.overTime = dateFormatFilter(response.data.overTime,'yyyy-MM-dd')
             this.form = response.data;
         },
         async _addAndModifyEquipment(){

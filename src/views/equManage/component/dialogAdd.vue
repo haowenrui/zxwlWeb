@@ -59,7 +59,7 @@
                 <el-input v-model.trim="form.insFrequency" clearable class="input-search" size="small" placeholder="请输入"></el-input>
             </el-form-item>
             <el-form-item label="过保时间:">
-                <el-date-picker v-model="form.overTime" type="date" class="input-search" placeholder="选择日期">
+                <el-date-picker v-model="form.overTime" type="date" value-format="yyyy-MM-dd" format="yyyy-MM-dd" class="input-search" placeholder="选择日期">
                 </el-date-picker>
             </el-form-item>
             <!-- <el-form-item label="消防设施:">
@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import { dateFormatFilter } from '@/filters/index';
 export default {
     components:{
     },
@@ -121,6 +122,10 @@ export default {
     mounted(){
         this.queryHostType();
         this.queryEquipmentList();
+
+        if(this.equipmentInfo.deviceId){
+            this.queryMiniType(this.equipmentInfo.deviceType);
+        }
         // this.queryMiniType();
     },
     methods:{
@@ -173,6 +178,7 @@ export default {
             const response = await this.$http.get(this.$equApi.queryEquipmentInfo,{
                 equipmentId: this.equipmentInfo.deviceId
             }); 
+            response.data.overTime = dateFormatFilter(response.data.overTime,'yyyy-MM-dd')
             this.form = response.data;
         },
         async _addAndModifyEquipment(){
