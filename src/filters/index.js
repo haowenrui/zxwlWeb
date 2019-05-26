@@ -32,9 +32,9 @@ export { dateFormatFilter }
 let userTypeFilter = (type) => {
     let result = '';
     switch(type){
-        case 'SUPERADMIN':
+       /* case 'SUPERADMIN':
             result = '超级管理员';
-            break;
+            break;*/
         case 'ADMIN':
             result = '管理员';
             break;

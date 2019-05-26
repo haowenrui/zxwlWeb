@@ -10,7 +10,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/api/': {
-                target: 'http://39.98.173.65:9000/',
+                target: 'http://127.0.0.1:9000/',
                 // target: 'http://192.168.43.71:9000/',
                 changeOrigin: true, //set the option changeOrigin to true for name-based virtual hosted sites
                 pathRewrite: {
