@@ -17,7 +17,7 @@
 				</el-select>
             </el-form-item>
             <el-form-item label="设备小类型:" required :show-message="false">
-                <el-select v-model="form.deviceTypeMini" placeholder="请选择" class="input-search" size="small">
+                <el-select v-model="form.deviceTypeMini" @change="deviceTypeMiniChange" value-key="code" placeholder="请选择" class="input-search" size="small">
 					<el-option v-for="item in miniTypeList" :key="item.code" :label="item.name" :value="item.code">
 					</el-option>
 				</el-select>
@@ -91,6 +91,7 @@ export default {
                 hostTypeMini: '',
                 deviceType: '',
                 deviceTypeMini: '',
+                equipmentConfigerCode: '',
                 letterCode: '',
                 proComName: '',
                 proComCode: '',
@@ -129,6 +130,13 @@ export default {
         // this.queryMiniType();
     },
     methods:{
+        deviceTypeMiniChange(code) {
+            let obj = {}; 
+            obj = this.miniTypeList.find((item)=>{
+                return item.code === code; 
+            }); 
+            this.form.equipmentConfigerCode = obj.equipmentConfigerCode; 
+        },
         async queryHostType(){
             const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
                 note: '',
