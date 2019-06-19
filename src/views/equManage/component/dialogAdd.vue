@@ -127,7 +127,6 @@ export default {
         if(this.equipmentInfo.deviceId){
             this.queryMiniType(this.equipmentInfo.deviceType);
         }
-        // this.queryMiniType();
     },
     methods:{
         deviceTypeMiniChange(code) {
