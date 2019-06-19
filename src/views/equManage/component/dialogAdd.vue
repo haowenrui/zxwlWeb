@@ -123,7 +123,6 @@ export default {
     mounted(){
         this.queryHostType();
         this.queryEquipmentList();
-
         if(this.equipmentInfo.deviceId){
             this.queryMiniType(this.equipmentInfo.deviceType);
         }
