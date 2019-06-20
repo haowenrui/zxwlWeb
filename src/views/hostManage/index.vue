@@ -355,7 +355,7 @@
 					} else {
 						this.$message({
 							showClose: true,
-							message: '导入失败',
+							message: response.message,
 							type: "error"
 						});
 					}
