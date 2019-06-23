@@ -264,6 +264,7 @@
                         _self.selectHostName = item.name;
                     }
                 });
+                this.uploadForm.equipmentConfigerCode = '';
                 const response = await this.$http.get(this.$equApi.getEquipmentConfiger,{
                     miniTypeCode: this.uploadForm.deviceName
                 });
@@ -323,7 +324,7 @@
 					} else {
 						this.$message({
 							showClose: true,
-							message: '导入失败',
+							message: response.message,
 							type: "error"
 						});
 					}
