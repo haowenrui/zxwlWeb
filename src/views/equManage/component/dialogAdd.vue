@@ -23,7 +23,7 @@
 				</el-select>
             </el-form-item>
             <el-form-item label="所属主机:">
-                <el-select v-model="form.hostId" placeholder="请选择" class="input-search" size="small">
+                <el-select v-model="form.hostId" placeholder="请选择" class="input-search" size="small" clearable>
 					<el-option v-for="item in hostEquList" :key="item.hostId" :label="item.hostName + '-' + item.hostQRCode" :value="item.hostId">
 					</el-option>
 				</el-select>
