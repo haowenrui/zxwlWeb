@@ -12,15 +12,15 @@
             </el-form-item>
             <el-form-item label="主机类型:" required :show-message="false">
                 <el-select v-model="form.hostType" placeholder="请选择" class="input-search" size="small" @change="deviceTypeChange">
-					<el-option v-for="item in hostList" :key="item.code" :label="item.name" :value="item.code">
-					</el-option>
-				</el-select>
+                    <el-option v-for="item in hostList" :key="item.code" :label="item.name" :value="item.code">
+                    </el-option>
+                    </el-select>
             </el-form-item>
             <el-form-item label="主机小类型:" required :show-message="false">
                 <el-select v-model="form.hostTypeMini" @change="deviceTypeMiniChange" value-key="code" placeholder="请选择" class="input-search" size="small">
-					<el-option v-for="item in miniTypeList" :key="item.code" :label="item.name" :value="item.code">
-					</el-option>
-				</el-select>
+                    <el-option v-for="item in miniTypeList" :key="item.code" :label="item.name" :value="item.code">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <!-- <el-form-item label="安装人id:">
                 <el-input v-model.trim="form.insUserId" clearable class="input-search" size="small" placeholder="请输入"></el-input>
@@ -97,9 +97,9 @@
             </el-form-item> -->
         </el-form>
         <div class="dialog-footer text-right pb20">
-			<el-button size="small" @click="cancel">取 消</el-button>
-			<el-button type="primary" @click="addNew" size="small">确 定</el-button>
-		</div>
+   <el-button size="small" @click="cancel">取 消</el-button>
+   <el-button type="primary" @click="addNew" size="small">确 定</el-button>
+  </div>
     </div>
 </template>
 
