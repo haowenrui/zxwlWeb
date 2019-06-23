@@ -173,6 +173,7 @@ export default {
             }); 
             this.form.equipmentConfigerCode = obj.equipmentConfigerCode; 
         },
+        
         async queryHostType(){
             const response = await this.$http.get(this.$equApi.findMiniTypeByNoteAndParentCode, {
                 note: '',
