@@ -164,7 +164,12 @@
 						return time.getTime() > Date.now();
 					}
 				},
-				tHead: [{
+				tHead: [
+					{
+						prop: 'deviceTypeMiniName',
+						label: '设备类型',
+						width: ''
+					},{
 						prop: 'deviceQRCode',
 						label: '设备编号',
 						width: ''
@@ -182,14 +187,6 @@
                             return deviceStatus(cellValue);
 						}
                     },
-                    {
-						prop: 'createTime',
-						label: '新增时间',
-						width: '',
-                        formatter: (row, column, cellValue) => {
-                            return dateFormat("yyyy-MM-dd hh:mm:ss", new Date(cellValue));
-						}
-					},
 					{
 						prop: 'proComName',
 						label: '厂家名称',
@@ -198,11 +195,6 @@
 					{
 						prop: 'insUserName',
 						label: '安装人员',
-						width: ''
-					},
-					{
-						prop: 'insFrequency',
-						label: '巡检频次',
 						width: ''
 					},
 					{
@@ -218,6 +210,14 @@
 						label: '创建者',
 						width: '',
 					},
+                    {
+						prop: 'createTime',
+						label: '创建时间',
+						width: '',
+                        formatter: (row, column, cellValue) => {
+                            return dateFormat("yyyy-MM-dd hh:mm:ss", new Date(cellValue));
+						}
+					}
 				],
 				tBody: [],
                 equipmentInfo: {},

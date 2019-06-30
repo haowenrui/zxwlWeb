@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<el-form ref="form" :inline="true" :model="queryParams" size="small">
-			<el-form-item label="安装人id:" prop="name">
+			<!--<el-form-item label="安装人id:" prop="name">
 				<el-input v-model.trim="queryParams.insUserId" clearable class="input-search" size="small" placeholder="请输入">
 				</el-input>
-			</el-form-item>
+			</el-form-item> -->
             <el-form-item label="在线状态:" prop="name">
                 <el-select v-model="queryParams.hostOnline" placeholder="请选择" class="input-search" size="small">
                     <el-option label="全部" value=""></el-option>
@@ -192,7 +192,12 @@
 						return time.getTime() > Date.now();
 					}
 				},
-				tHead: [{
+				tHead: [
+					{
+						prop: 'hostTypeMiniName',
+						label: '主机类型',
+						width: ''
+					},{
 						prop: 'hostQRCode',
 						label: '主机编号',
 						width: ''
@@ -210,14 +215,6 @@
                             return deviceStatus(cellValue);
 						}
                     },
-                    {
-						prop: 'createTime',
-						label: '新增时间',
-						width: '',
-                        formatter: (row, column, cellValue) => {
-                            return dateFormat("yyyy-MM-dd hh:mm:ss", new Date(cellValue));
-						}
-					},
 					{
 						prop: 'proComName',
 						label: '厂家名称',
@@ -226,11 +223,6 @@
 					{
 						prop: 'insUserName',
 						label: '安装人员',
-						width: ''
-					},
-					{
-						prop: 'insFrequency',
-						label: '巡检频次',
 						width: ''
 					},
 					{
@@ -246,6 +238,14 @@
 						label: '创建者',
 						width: '',
 					},
+                    {
+						prop: 'createTime',
+						label: '创建时间',
+						width: '',
+                        formatter: (row, column, cellValue) => {
+                            return dateFormat("yyyy-MM-dd hh:mm:ss", new Date(cellValue));
+						}
+					}
 				],
 				tBody: [],
                 equipmentInfo: {},
