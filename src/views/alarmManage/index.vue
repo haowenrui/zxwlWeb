@@ -126,7 +126,11 @@ export default {
                         let currentAlarmType = this.alarmTypeList.find(item => {
                             return item.value === cellValue;
                         })
-                        return currentAlarmType.name;
+                        if(currentAlarmType){
+                            return currentAlarmType.name;
+                        }else{
+                            return cellValue;
+                        }
                     }
                 },
                 {
